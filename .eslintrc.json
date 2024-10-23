@@ -3,6 +3,12 @@
   "ignorePatterns": [
     "projects/**/*"
   ],
+  "parserOptions": {
+    "project": [
+      "tsconfig.json"
+    ],
+    "createDefaultProgram": true
+  },
   "overrides": [
     {
       "files": [
