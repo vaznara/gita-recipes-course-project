@@ -1,0 +1,13 @@
+.brand-left {
+  max-width: 21.875rem;
+}
+
+.footer-nav > ul > li:nth-child(1) a {
+  font-weight: bold !important;
+}
+
+.brand-left p,
+.footer-copyright,
+.footer-social > .btn > i {
+  color: var(--rcp-gray-600);
+}
