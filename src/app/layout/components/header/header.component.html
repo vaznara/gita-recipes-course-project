@@ -1,1 +1,31 @@
-<p>header works!</p>
+<nav class="navbar navbar-expand-sm bg-body py-3">
+  <div class="container">
+    <a
+      class="navbar-brand"
+      [routerLink]="['/']"
+      href="#"
+      >Recipes</a
+    >
+    <rcp-main-menu />
+    <div class="user d-flex gap-1 align-items-center">
+      <div class="search">
+        <button
+          class="btn"
+          type="button"
+          aria-label="Toggle search">
+          <i class="bi bi-search search-toggler-icon"></i>
+        </button>
+      </div>
+      <div class="user-control"></div>
+    </div>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasNavbar"
+      aria-controls="offcanvasNavbar"
+      aria-label="Toggle navigation">
+      <i class="bi bi-list navbar-toggler-bs-icon"></i>
+    </button>
+  </div>
+</nav>

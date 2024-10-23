@@ -20,16 +20,22 @@ $font-size-base: 0.875rem;
 $font-size-sm: $font-size-base * 0.875;
 $font-size-lg: $font-size-base * 1.25;
 
-$display-font-family: $headings-font-family-sans-serif !default;
+$display-font-family: $headings-font-family-sans-serif;
 $display-font-weight: 700;
 
 // Border radius
-$border-radius: 0.25rem !default;
-$border-radius-sm: 0.125rem !default;
-$border-radius-lg: 0.5rem !default;
-$border-radius-xl: 1rem !default;
-$border-radius-xxl: 2rem !default;
-$border-radius-pill: 50rem !default;
+$border-radius: 0.25rem;
+$border-radius-sm: 0.125rem;
+$border-radius-lg: 0.5rem;
+$border-radius-xl: 1rem;
+$border-radius-xxl: 2rem;
+$border-radius-pill: 50rem;
 
 // Buttons
-$btn-color: var(--#{$prefix}body-color) !default;
+$btn-color: var(--#{$prefix}body-color);
+
+// Nav
+$nav-link-font-size: 1rem;
+$nav-link-font-weight: 500;
+
+$navbar-nav-link-padding-x: 1.5rem;
