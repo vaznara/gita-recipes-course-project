@@ -11,5 +11,9 @@ import { SearchComponent } from "./components/search/search.component";
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
+  isAuthorized: boolean = false;
 
+  logout(): void {
+
+  }
 }

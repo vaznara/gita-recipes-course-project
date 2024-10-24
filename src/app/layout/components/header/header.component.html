@@ -7,9 +7,13 @@
       >Recipes</a
     >
     <rcp-main-menu />
-    <div class="user d-flex gap-1 align-items-center">
+    <div class="user d-flex gap-2 align-items-center">
       <rcp-search />
+      @if(isAuthorized) {
       <div class="user-control"></div>
+      } @else {
+      <button class="btn btn-primary text-white fw-bold">Login</button>
+      }
       <button
         class="navbar-toggler"
         type="button"
