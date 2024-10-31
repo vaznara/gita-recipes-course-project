@@ -9,10 +9,10 @@
     <rcp-main-menu />
     <div class="user d-flex gap-2 align-items-center">
       <rcp-search />
-      @if(isAuthorized) {
-      <div class="user-control"></div>
+      @if (isAuthorized) {
+        <rcp-user-control />
       } @else {
-      <button class="btn btn-primary text-white fw-bold">Login</button>
+        <button class="btn btn-primary text-white fw-bold">Login</button>
       }
       <button
         class="navbar-toggler"
