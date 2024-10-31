@@ -1,0 +1,15 @@
+<div class="search-wrapper search d-flex align-items-center position-relative">
+  <input
+    [@openClose]="isOpen ? 'open' : 'closed'"
+    class="form-control"
+    type="text"
+    placeholder="Search..."
+    aria-label="Header search input" />
+  <button
+    (click)="toggle()"
+    class="btn z-1 fs-4"
+    type="button"
+    aria-label="Toggle search">
+    <i class="bi bi-search search-toggler-icon"></i>
+  </button>
+</div>

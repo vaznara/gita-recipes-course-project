@@ -1,19 +1,13 @@
 {
   "root": true,
-  "ignorePatterns": [
-    "projects/**/*"
-  ],
+  "ignorePatterns": ["projects/**/*"],
   "parserOptions": {
-    "project": [
-      "tsconfig.json"
-    ],
+    "project": ["tsconfig.json"],
     "createDefaultProgram": true
   },
   "overrides": [
     {
-      "files": [
-        "*.ts"
-      ],
+      "files": ["*.ts"],
       "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
@@ -32,51 +26,28 @@
             "argsIgnorePattern": "^_"
           }
         ],
-        "brace-style": [
-          "error",
-          "1tbs"
-        ],
+        "brace-style": ["error", "1tbs"],
         "eqeqeq": "error",
         "no-else-return": "error",
         "no-trailing-spaces": "error",
         "no-var": "error",
-        "object-shorthand": [
-          "error",
-          "properties"
-        ],
+        "object-shorthand": ["error", "properties"],
         "prefer-const": "error",
         "prefer-object-spread": "error",
         "prefer-template": "error",
         "no-console": [
           "error",
           {
-            "allow": [
-              "warn",
-              "error"
-            ]
+            "allow": ["warn", "error"]
           }
         ],
         "@typescript-eslint/naming-convention": [
           "error",
           {
-            "selector": [
-              "classProperty",
-              "variable"
-            ],
-            "types": [
-              "boolean"
-            ],
-            "format": [
-              "PascalCase"
-            ],
-            "prefix": [
-              "is",
-              "should",
-              "has",
-              "can",
-              "did",
-              "will"
-            ]
+            "selector": ["classProperty", "variable"],
+            "types": ["boolean"],
+            "format": ["PascalCase"],
+            "prefix": ["is", "should", "has", "can", "did", "will"]
           }
         ],
         "@angular-eslint/directive-selector": [
@@ -104,24 +75,14 @@
             }
           }
         ],
-        "@angular-eslint/sort-lifecycle-methods": [
-          "error"
-        ],
-        "@angular-eslint/contextual-decorator": [
-          "error"
-        ],
-        "@angular-eslint/no-conflicting-lifecycle": [
-          "error"
-        ],
-        "@angular-eslint/no-lifecycle-call": [
-          "error"
-        ]
+        "@angular-eslint/sort-lifecycle-methods": ["error"],
+        "@angular-eslint/contextual-decorator": ["error"],
+        "@angular-eslint/no-conflicting-lifecycle": ["error"],
+        "@angular-eslint/no-lifecycle-call": ["error"]
       }
     },
     {
-      "files": [
-        "*.html"
-      ],
+      "files": ["*.html"],
       "extends": [
         "plugin:@angular-eslint/template/recommended",
         "plugin:@angular-eslint/template/accessibility",
@@ -134,21 +95,11 @@
             "maxComplexity": 5
           }
         ],
-        "@angular-eslint/template/no-any": [
-          "error"
-        ],
-        "@angular-eslint/template/no-interpolation-in-attributes": [
-          "error"
-        ],
-        "@angular-eslint/template/no-negated-async": [
-          "error"
-        ],
-        "@angular-eslint/template/prefer-control-flow": [
-          "error"
-        ],
-        "@angular-eslint/template/prefer-self-closing-tags": [
-          "error"
-        ]
+        "@angular-eslint/template/no-any": ["error"],
+        "@angular-eslint/template/no-interpolation-in-attributes": ["error"],
+        "@angular-eslint/template/no-negated-async": ["error"],
+        "@angular-eslint/template/prefer-control-flow": ["error"],
+        "@angular-eslint/template/prefer-self-closing-tags": ["error"]
       }
     }
   ]
