@@ -1,0 +1,27 @@
+@if (maxLengthRecipes.length) {
+  <h6 class="display-6 mb-4">{{ title }}</h6>
+  <div class="row">
+    @for (recipe of maxLengthRecipes; track $index) {
+      <div class="col-4">
+        <a
+          href
+          [routerLink]="['/recipe/' + recipe.id]"
+          routerLinkActive="router-link-active"
+          class="col-6 col-md-3 mb-5 text-decoration-none">
+          <div class="cat-wrapper d-flex flex-column mb-4 gap-2">
+            <img
+              [src]="recipe.imgPath + '?random=' + recipe.id"
+              [alt]="recipe.title"
+              class="cat-img" />
+            <div class="recipe-ratings d-flex gap-1">
+              @for (i of [].constructor(4); track $index) {
+                <i class="bi bi-star-fill text-primary"></i>
+              }
+            </div>
+            <h6>{{ recipe.title }}</h6>
+          </div>
+        </a>
+      </div>
+    }
+  </div>
+}

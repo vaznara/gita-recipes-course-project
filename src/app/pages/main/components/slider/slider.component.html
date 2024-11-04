@@ -1,0 +1,44 @@
+<div
+  id="mainSlider"
+  class="carousel slide">
+  <div class="carousel-indicators">
+    @for (item of [].constructor(recipes?.length); track $index) {
+      <button
+        type="button"
+        data-bs-target="#mainSlider"
+        [attr.data-bs-slide-to]="$index"
+        [ngClass]="{ active: $index === 0 }"
+        [attr.aria-current]="$index === 0"
+        [attr.aria-label]="'Slide ' + $index"></button>
+    }
+  </div>
+  <div class="carousel-inner">
+    @for (item of recipes; track item.id) {
+      <div
+        class="carousel-item"
+        [ngClass]="{ active: $index === 0 }">
+        <rcp-slide [slide]="item" />
+      </div>
+    }
+  </div>
+  <button
+    class="carousel-control-prev"
+    type="button"
+    data-bs-target="#mainSlider"
+    data-bs-slide="prev">
+    <span
+      class="carousel-control-prev-icon"
+      aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button
+    class="carousel-control-next"
+    type="button"
+    data-bs-target="#mainSlider"
+    data-bs-slide="next">
+    <span
+      class="carousel-control-next-icon"
+      aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
