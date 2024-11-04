@@ -1,0 +1,206 @@
+<div class="row">
+  <div class="col-12">
+    <h1 class="display-2">Create new recipe</h1>
+    <hr class="my-3" />
+    <form
+      (ngSubmit)="onSubmit()"
+      [formGroup]="recipeForm"
+      class="recipe-form">
+      <div class="mb-3">
+        <label
+          for="formFileLg"
+          class="form-label"
+          >Upload image</label
+        >
+        <input
+          class="form-control"
+          id="formFileLg"
+          accept="image/png, image/jpeg"
+          type="file" />
+      </div>
+      <div class="mb-3">
+        <label
+          for="recipeTitle"
+          class="form-label"
+          >Recipe title</label
+        >
+        <input
+          type="text"
+          class="form-control"
+          formControlName="title"
+          id="recipeTitle" />
+        <div
+          id="titleHint"
+          class="form-text">
+          Here you can enter recipe title, recommended short and decriptive title.
+        </div>
+      </div>
+      <div class="mb-3">
+        <label
+          for="recipeShortDescription"
+          class="form-label"
+          >Recipe short description</label
+        >
+        <textarea
+          class="form-control"
+          formControlName="shortDescription"
+          name="recipeShortDescription"
+          placeholder="Enter short description for recipe"
+          id="recipeShortDescription"></textarea>
+        <div
+          id="shortDescriptionHint"
+          class="form-text">
+          Enter short description, minimum of 100 characters. It will be shown under the recipe
+          title.
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-6">
+          <label
+            for="recipePrepTime"
+            class="form-label"
+            >Preparation Time</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            formControlName="preparationTime"
+            id="recipePrepTime" />
+          <div
+            id="prepTimeHint"
+            class="form-text">
+            Enter meal preparation time in minutes.
+          </div>
+        </div>
+        <div class="col-6">
+          <label
+            for="recipeServings"
+            class="form-label"
+            >Servings</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            formControlName="servingCount"
+            id="recipeServings" />
+          <div
+            id="servingsHint"
+            class="form-text">
+            Enter quantity of servings.
+          </div>
+        </div>
+      </div>
+      <div class="mt-5 mb-3">
+        <div formArrayName="ingredientsBlock">
+          <h5 class="display-5 text-center mb-4">Ingredients</h5>
+          @for (item of ingredientBlocks.controls; track $index; let blockIdx = $index) {
+            <div
+              class="ingredient-row mb-3"
+              [formGroupName]="blockIdx">
+              <div class="input-group flex-nowrap">
+                <span
+                  class="input-group-text"
+                  [id]="'ingredients-addon_' + blockIdx"
+                  >Ingredients for:
+                </span>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="ingredientsBlocktitle"
+                  aria-label="ingredients-title"
+                  [attr.aria-describedby]="'ingredients-addon_' + blockIdx" />
+              </div>
+              <div
+                id="ingredientsBlockHint"
+                class="form-text">
+                Enter title for ingredients block. On the recipe page ingredients will be separated
+                within this blocks.
+              </div>
+              <div
+                class="ingredients"
+                formArrayName="ingredients">
+                @for (
+                  ingredient of getBlockIngredients(blockIdx).controls;
+                  track ingredient;
+                  let ingrIdx = $index
+                ) {
+                  <div class="ingredient-row d-flex gap-2 align-items-center mb-2">
+                    <span
+                      class="step-count rounded-circle flex-shrink-0 d-flex justify-content-center align-items-center text-white bg-primary"
+                      >{{ ingrIdx + 1 }}</span
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      [formControlName]="ingrIdx"
+                      [id]="'ingredient_' + ingrIdx" />
+                    <button
+                      (click)="removeIngredient(blockIdx, ingrIdx)"
+                      class="btn"
+                      type="button">
+                      <i class="bi bi-x-circle fs-2 text-danger"></i>
+                    </button>
+                  </div>
+                }
+                <div class="d-flex justify-content-center">
+                  <button
+                    (click)="addIngredient($index)"
+                    class="btn"
+                    type="button">
+                    <i class="bi bi-plus-circle-fill text-primary fs-2"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          }
+          <div class="button-wrapper d-flex justify-content-center">
+            <button
+              type="button"
+              class="btn btn-primary text-white"
+              (click)="addIngredientBlock()">
+              + Add Ingredients block
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="my-5">
+        <h5 class="display-5 text-center mb-4">Instructions steps</h5>
+        @for (step of steps.controls; track $index) {
+          <div
+            class="step-item d-flex align-items-center gap-2 mb-2"
+            formArrayName="steps">
+            <span
+              class="step-count rounded-circle flex-shrink-0 d-flex justify-content-center align-items-center text-white bg-primary"
+              >{{ $index + 1 }}</span
+            >
+            <textarea
+              [formControlName]="$index"
+              class="form-control"
+              [id]="'step_' + $index + '_description'"></textarea>
+            <button
+              (click)="removeStep($index)"
+              class="btn"
+              type="button">
+              <i class="bi bi-x-circle fs-2 text-danger"></i>
+            </button>
+          </div>
+        }
+        <div class="btn-wrapper d-flex justify-content-center">
+          <button
+            (click)="addStep()"
+            class="btn"
+            type="button">
+            <i class="bi bi-plus-circle-fill text-primary fs-2"></i>
+          </button>
+        </div>
+      </div>
+      <div class="btn-wrapper d-flex justify-content-end">
+        <button
+          [disabled]="recipeForm.touched && recipeForm.invalid"
+          class="btn text-white btn-primary">
+          Save recipe
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
