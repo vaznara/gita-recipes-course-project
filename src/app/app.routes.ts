@@ -4,9 +4,11 @@ import { RecipeEditComponent } from './pages/recipe-edit/recipe-edit.component';
 import { CategoriesComponent } from './pages/categories/categories.component';
 import { RecipesComponent } from './pages/recipes/recipes.component';
 import { MainComponent } from './pages/main/main.component';
+import { LoginComponent } from './pages/login/login.component';
 
 export const routes: Routes = [
   { path: '', component: MainComponent },
+  { path: 'login', component: LoginComponent },
   {
     path: 'recipe', component: RecipeViewComponent, children: [
       { path: ':id', component: RecipeViewComponent },
