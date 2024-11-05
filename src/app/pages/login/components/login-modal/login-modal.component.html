@@ -1,0 +1,27 @@
+<div
+  id="loginModal"
+  class="modal"
+  tabindex="-1"
+  aria-labelledby="loginModalLabel"
+  [attr.aria-hidden]="dialogRef.getState() !== 0">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1
+          class="modal-title display-6"
+          id="loginModalLabel">
+          Login
+        </h1>
+        <button
+          (click)="dialogRef.close()"
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <rcp-login-form />
+      </div>
+    </div>
+  </div>
+</div>

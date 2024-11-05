@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { LoginFormComponent } from '../../../../../pages/login/login-form/login-form.component';
+import { LoginModalComponent } from '../../../../../pages/login/components/login-modal/login-modal.component';
 
 @Component({
   selector: 'rcp-user-control',
@@ -14,6 +14,8 @@ export class UserControlComponent {
   constructor(private dialog: MatDialog) { }
 
   onLogin(): void {
-    this.dialog.open(LoginFormComponent);
+    this.dialog.open(LoginModalComponent, {
+      width: '500px'
+    });
   }
 }
