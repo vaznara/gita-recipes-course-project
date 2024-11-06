@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, Unsubscribe, updateProfile, User, UserCredential } from '@angular/fire/auth';
 import { ISignInUser, ISignUpUser } from '../interfaces/interface';
-import { BehaviorSubject, catchError, concatMap, from, Observable, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, concatMap, from, Observable, tap } from 'rxjs';
 import { LoaderService } from './loader.service';
+import { ApiErrorHandlerService } from './api-error-handler.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ export class AuthService {
 
   constructor(
     private _auth: Auth,
+    private apiErrorHandler: ApiErrorHandlerService,
     private loaderService: LoaderService
   ) { }
 
@@ -31,7 +33,7 @@ export class AuthService {
         }),
         catchError((err) => {
           this.loaderService.isLoading$.next(false);
-          return throwError(() => err);
+          return this.apiErrorHandler.handleError(err);
         })
       )
   }
@@ -42,7 +44,7 @@ export class AuthService {
       .pipe(
         catchError(err => {
           this.loaderService.isLoading$.next(false);
-          return throwError(() => err);
+          return this.apiErrorHandler.handleError(err);
         }),
         tap((userCredential) => {
           this.loaderService.isLoading$.next(false);
@@ -56,7 +58,7 @@ export class AuthService {
     return from(this._auth.signOut()).pipe(
       catchError(err => {
         this.loaderService.isLoading$.next(false);
-        return throwError(() => err);
+        return this.apiErrorHandler.handleError(err);
       }),
       tap(() => this.loaderService.isLoading$.next(false))
     );
