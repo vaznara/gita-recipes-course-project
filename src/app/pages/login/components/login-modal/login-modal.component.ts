@@ -1,5 +1,5 @@
-import { Component, inject, Inject } from '@angular/core';
-import { LoginFormComponent } from '../../login-form/login-form.component';
+import { Component, inject } from '@angular/core';
+import { LoginFormComponent } from '../login-form/login-form.component';
 import { MatDialogClose, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
