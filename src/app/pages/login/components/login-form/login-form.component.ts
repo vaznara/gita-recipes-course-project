@@ -1,7 +1,8 @@
 import { NgClass } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { ISignInUser } from '../../../../shared/interfaces/interface';
 
 @Component({
   selector: 'rcp-login-form',
@@ -11,6 +12,8 @@ import { RouterLink } from '@angular/router';
   styleUrl: './login-form.component.scss'
 })
 export class LoginFormComponent {
+
+  @Output() userData: EventEmitter<ISignInUser> = new EventEmitter();
 
   loginForm: FormGroup = new FormGroup({
     email: new FormControl<string>('', [Validators.required, Validators.email]),
@@ -26,6 +29,6 @@ export class LoginFormComponent {
   }
 
   onSubmit(): void {
-    console.log(this.loginForm.value)
+    this.userData.emit(this.loginForm.value);
   }
 }

@@ -1,6 +1,7 @@
 import { NgClass } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl, ReactiveFormsModule } from '@angular/forms';
+import { ISignUpUser } from '../../../../shared/interfaces/interface';
 
 @Component({
   selector: 'rcp-signup-form',
@@ -10,6 +11,8 @@ import { FormGroup, FormControl, Validators, AbstractControl, ReactiveFormsModul
   styleUrl: './signup-form.component.scss'
 })
 export class SignupFormComponent {
+
+  @Output() createUser: EventEmitter<ISignUpUser> = new EventEmitter();
 
   signupForm: FormGroup = new FormGroup({
     fullName: new FormControl<string>('', [Validators.required]),
@@ -30,6 +33,6 @@ export class SignupFormComponent {
   }
 
   onSubmit(): void {
-    console.log(this.signupForm.value)
+    this.createUser.emit(this.signupForm.value);
   }
 }
