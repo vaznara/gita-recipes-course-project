@@ -6,6 +6,7 @@ import { RecipesComponent } from './pages/recipes/recipes.component';
 import { MainComponent } from './pages/main/main.component';
 import { LoginComponent } from './pages/login/login.component';
 import { SignupComponent } from './pages/signup/signup.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 export const routes: Routes = [
   { path: '', component: MainComponent },
@@ -19,5 +20,5 @@ export const routes: Routes = [
   },
   { path: 'categories', component: CategoriesComponent },
   { path: 'category/:id', component: RecipesComponent },
-  { path: '**', component: MainComponent }
+  { path: '**', component: NotFoundComponent }
 ];
