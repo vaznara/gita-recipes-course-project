@@ -39,3 +39,9 @@ export interface ISignInUser {
   email: string;
   password: string
 }
+
+export interface IMenuItem {
+  code: string;
+  title: string;
+  path: string;
+}

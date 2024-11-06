@@ -1,41 +1,27 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { LoginModalComponent } from '../../../../../pages/login/components/login-modal/login-modal.component';
-import { NavigationStart, Router, RouterEvent, Event } from '@angular/router';
-import { filter, Subject, takeUntil } from 'rxjs';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { IMenuItem } from '../../../../../shared/interfaces/interface';
 
 @Component({
   selector: 'rcp-user-control',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './user-control.component.html',
   styleUrl: './user-control.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UserControlComponent implements OnInit, OnDestroy {
+export class UserControlComponent {
 
-  private ngUnsubscribe$: Subject<void> = new Subject();
-  private dialogRef?: MatDialogRef<LoginModalComponent>;
+  @Input() userDisplayName!: string | null;
+  @Input() userPhotoPath!: string | null;
+  @Input() userMenu?: IMenuItem[];
 
-  constructor(private router: Router, private dialog: MatDialog) { }
+  @Output() logout: EventEmitter<void> = new EventEmitter();
 
-  ngOnInit(): void {
-    this.router.events.pipe(
-      filter((event: Event | RouterEvent) => event instanceof NavigationStart),
-      filter(() => !!this.dialogRef),
-      takeUntil(this.ngUnsubscribe$))
-      .subscribe(() => {
-        this.dialogRef?.close();
-      })
+  constructor() { }
+
+  onLogout(): void {
+    this.logout.emit();
   }
 
-  onLogin(): void {
-    this.dialogRef = this.dialog.open(LoginModalComponent, {
-      width: '500px',
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.ngUnsubscribe$.next();
-    this.ngUnsubscribe$.complete();
-  }
 }
