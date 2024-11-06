@@ -20,7 +20,7 @@
           aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <rcp-login-form />
+        <rcp-login-form (userData)="onLogin($event)" />
       </div>
     </div>
   </div>

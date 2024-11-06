@@ -28,3 +28,14 @@ export interface IIngredient {
   unit: string;
   quantity: number;
 }
+
+export interface ISignUpUser {
+  fullName: string;
+  email: string;
+  password: string;
+}
+
+export interface ISignInUser {
+  email: string;
+  password: string
+}
