@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, Unsubscribe, updateProfile, User, UserCredential } from '@angular/fire/auth';
 import { ISignInUser, ISignUpUser } from '../interfaces/interface';
-import { BehaviorSubject, catchError, concatMap, from, Observable, tap } from 'rxjs';
+import { catchError, concatMap, from, Observable, ReplaySubject, tap } from 'rxjs';
 import { LoaderService } from './loader.service';
 import { ApiErrorHandlerService } from './api-error-handler.service';
 
@@ -10,7 +10,8 @@ import { ApiErrorHandlerService } from './api-error-handler.service';
 })
 export class AuthService {
 
-  private _currentUser$: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
+  // private _currentUser$: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
+  private _currentUser$: ReplaySubject<User | null> = new ReplaySubject<User | null>(1);
 
   constructor(
     private _auth: Auth,
@@ -67,7 +68,7 @@ export class AuthService {
   checkAuthState(): Unsubscribe {
     this.loaderService.isLoading$.next(true)
     return onAuthStateChanged(this._auth, (user) => {
-      if (user) this._currentUser$.next(user);
+      this._currentUser$.next(user);
       this.loaderService.isLoading$.next(false);
     })
   }
