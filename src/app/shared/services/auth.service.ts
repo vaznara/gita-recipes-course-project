@@ -61,7 +61,10 @@ export class AuthService {
         this.loaderService.isLoading$.next(false);
         return this.apiErrorHandler.handleError(err);
       }),
-      tap(() => this.loaderService.isLoading$.next(false))
+      tap(() => {
+        this._currentUser$.next(null);
+        this.loaderService.isLoading$.next(false);
+      })
     );
   }
 

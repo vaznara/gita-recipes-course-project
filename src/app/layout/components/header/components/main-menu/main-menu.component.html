@@ -1,28 +1,6 @@
 <div
   class="collapse navbar-collapse-md flex-grow-0"
-  id="navbarNavAltMarkup">
-  <div class="navbar-nav">
-    <a
-      class="nav-link active"
-      aria-current="page"
-      [routerLink]="['/']"
-      routerLinkActive="active"
-      >Homepage</a
-    >
-    <a
-      class="nav-link"
-      [routerLink]="['/categories']"
-      routerLinkActive="active"
-      href
-      >Recipes</a
-    >
-    <a
-      class="nav-link"
-      href="#"
-      >Blog</a
-    >
-  </div>
-</div>
+  id="navbarNavAltMarkup"></div>
 
 <div
   class="offcanvas offcanvas-end"
@@ -33,7 +11,7 @@
     <h5
       class="offcanvas-title"
       id="offcanvasNavbarLabel">
-      Offcanvas
+      Menu
     </h5>
     <button
       type="button"
@@ -43,6 +21,38 @@
   </div>
   <div class="offcanvas-body">
     <div class="navbar-nav justify-content-end flex-grow-1 pe-3">
+      <div class="d-xl-none">
+        <div class="user-block d-flex gap-2 align-items-center mb-2">
+          @if (userPhotoPath) {
+            <img
+              [src]="userPhotoPath"
+              [alt]="userDisplayName"
+              class="user-photo" />
+          } @else {
+            <i class="bi bi-person-circle fs-2"></i>
+          }
+          <span>{{ 'Vasily Titov' }}</span>
+        </div>
+        <hr />
+        @if (userMenu && userMenu.length) {
+          @for (item of userMenu; track $index) {
+            <a
+              class="nav-link"
+              [routerLink]="[item.path]"
+              routerLinkActive="active"
+              href
+              >{{ item.title }}</a
+            >
+          }
+          <a
+            (click)="onLogout()"
+            class="nav-link"
+            href
+            >Logout</a
+          >
+          <hr />
+        }
+      </div>
       <a
         class="nav-link active"
         aria-current="page"
