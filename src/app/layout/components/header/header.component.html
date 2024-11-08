@@ -6,13 +6,22 @@
       href="#"
       >Recipes</a
     >
-    <rcp-main-menu />
+    <rcp-main-menu [userMenu]="userMenu" />
     <div class="user d-flex gap-2 align-items-center">
       <rcp-search />
-      @if (isAuthorized) {
-        <rcp-user-control />
+      @if (user) {
+        <rcp-user-control
+          class="d-none d-xl-block"
+          (logout)="onLogout()"
+          [userMenu]="userMenu"
+          [userDisplayName]="user.displayName"
+          [userPhotoPath]="user.photoURL" />
       } @else {
-        <button class="btn btn-primary text-white fw-bold">Login</button>
+        <button
+          (click)="onLogin()"
+          class="btn btn-primary text-white fw-bold">
+          Login
+        </button>
       }
       <button
         class="navbar-toggler"

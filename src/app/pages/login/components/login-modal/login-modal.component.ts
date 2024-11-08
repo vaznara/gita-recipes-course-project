@@ -23,7 +23,7 @@ export class LoginModalComponent implements OnDestroy {
 
   onLogin(userData: ISignInUser): void {
     this.authService.signInUser(userData).pipe(takeUntil(this.ngUnsubscribe$))
-      .subscribe()
+      .subscribe(() => this.dialogRef.close())
   }
 
   ngOnDestroy(): void {
