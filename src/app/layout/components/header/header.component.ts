@@ -20,7 +20,7 @@ import { IMenuItem } from '../../../shared/interfaces/interface';
 export class HeaderComponent implements OnInit, OnDestroy {
 
   ngUnsubscribe$: Subject<void> = new Subject();
-  user?: User;
+  user: User | null = null;
   userMenu: IMenuItem[] = [
     { code: 'profile', path: 'user/profile', title: 'My Profile' },
     { code: 'recipes', path: 'user/recipes', title: 'My Recipes' },
@@ -33,7 +33,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.authService.currentUser$.pipe(
-      filter(user => !!user),
       takeUntil(this.ngUnsubscribe$)
     )
       .subscribe((user) => {

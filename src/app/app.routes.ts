@@ -9,15 +9,21 @@ import { SignupComponent } from './pages/signup/signup.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { authGuard } from './shared/guards/auth-guard.guard';
 import { loginGuard } from './shared/guards/login.guard';
+import { UserProfileComponent } from './pages/user-profile/user-profile.component';
 
 export const routes: Routes = [
   { path: '', component: MainComponent },
   { path: 'login', component: LoginComponent, canActivate: [loginGuard] },
-  { path: 'sign-up', component: SignupComponent },
+  { path: 'sign-up', component: SignupComponent, canActivate: [loginGuard] },
   {
     path: 'recipe', component: RecipeViewComponent, children: [
       { path: ':id', component: RecipeViewComponent },
       { path: 'edit/:id', component: RecipeEditComponent, canActivate: [authGuard] },
+    ]
+  },
+  {
+    path: 'user', canActivateChild: [authGuard], runGuardsAndResolvers: 'always', children: [
+      { path: 'profile', component: UserProfileComponent }
     ]
   },
   { path: 'categories', component: CategoriesComponent },
