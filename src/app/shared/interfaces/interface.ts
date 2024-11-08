@@ -1,3 +1,5 @@
+import { TemplateRef } from "@angular/core";
+
 export interface ICategory {
   id: number;
   name: string;
@@ -44,4 +46,24 @@ export interface IMenuItem {
   code: string;
   title: string;
   path: string;
+}
+
+export interface IDialogData {
+  id: string;
+  title?: {
+    id: string;
+    title: string;
+  };
+  hasCloseBtn: boolean;
+  inputTemplateRef?: TemplateRef<unknown>;
+  hasHtml?: boolean;
+  bodyContent?: string;
+  hasFooter?: boolean;
+  buttons: IDialogDataButton[];
+}
+
+export interface IDialogDataButton {
+  text: string;
+  btnClasses: string[];
+  isCloseBtn: boolean;
 }

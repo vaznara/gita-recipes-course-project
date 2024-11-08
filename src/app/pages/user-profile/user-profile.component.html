@@ -1,0 +1,169 @@
+<div class="row justify-content-center align-items-center">
+  <div class="col-12 col-md-8 col-lg-6">
+    @if (user) {
+      @if (isUpdated) {
+        <div
+          class="alert alert-success alert-dismissible fade show"
+          role="alert">
+          Profile updated!
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"></button>
+        </div>
+      }
+      <div class="page-top d-flex justify-content-between align-items-center">
+        <h5 class="display-5">Profile</h5>
+        <div class="btn-wrapper">
+          <button
+            (click)="onFullNameUpdate()"
+            type="button"
+            class="btn btn-primary text-white">
+            Save
+          </button>
+        </div>
+      </div>
+      <hr />
+      <div class="controls d-flex gap-3 align-items-center">
+        @if (user.photoURL) {
+          <img
+            [src]="user.photoURL"
+            [alt]="user.displayName"
+            class="user-photo rounded-circle" />
+        } @else {
+          <i class="bi bi-person-circle user-icon text-secondary"></i>
+        }
+
+        <button class="btn btn-primary text-white">Change photo</button>
+        <button
+          (click)="onDelete()"
+          class="btn btn-outline-danger">
+          Delete
+        </button>
+      </div>
+      <form
+        class="my-5"
+        [formGroup]="userProfileForm">
+        <div class="mb-3">
+          <label
+            for="fullNameInput"
+            class="form-label"
+            >Full Name</label
+          >
+          <input
+            formControlName="fullName"
+            id="fullNameInput"
+            type="text"
+            class="form-control"
+            aria-label="Full Name" />
+        </div>
+        <div class="mb-3">
+          <label
+            for="emailInput"
+            class="form-label"
+            >Email</label
+          >
+          <input
+            formControlName="email"
+            id="emailInput"
+            type="email"
+            class="form-control"
+            aria-label="Email" />
+        </div>
+        <div class="mb-3">
+          <label
+            for="passwordInput"
+            class="form-label"
+            >Password</label
+          >
+          <input
+            disabled
+            id="passwordInput"
+            value="•••••••"
+            type="password"
+            class="form-control"
+            aria-label="Password" />
+          <div
+            id="passwordHelpBlock"
+            class="form-text text-end">
+            <a
+              (click)="onPasswordChange(); $event.preventDefault()"
+              class="text-decoration-none text-primary"
+              href="#"
+              >Change</a
+            >
+          </div>
+        </div>
+      </form>
+      <hr />
+      <div class="page-bottom d-flex justify-content-between align-items-center">
+        <div class="btn-wrapper">
+          <button
+            (click)="onLogout()"
+            type="button"
+            class="btn d-flex align-items-center gap-3">
+            <i class="bi bi-box-arrow-left fs-4"></i>
+            Logout
+          </button>
+        </div>
+        <div class="btn-wrapper">
+          <button
+            (click)="onDelete()"
+            type="button"
+            class="btn d-flex align-items-center gap-3 text-primary">
+            Delete account
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+
+<!-- password change template -->
+<ng-template #passwordChangeRef>
+  <form
+    class="password-sub-form"
+    [formGroup]="passwordForm">
+    <div class="mb-3">
+      <label
+        for="newPasswordInput"
+        class="form-label"
+        >New password</label
+      >
+      <input
+        id="newPasswordInput"
+        placeholder="•••••••"
+        formControlName="newPassword"
+        type="password"
+        class="form-control"
+        aria-label="New password"
+        [ngClass]="{
+          'is-invalid': passwordForm.touched && passwordForm.invalid,
+        }" />
+    </div>
+    <div class="mb-3">
+      <label
+        for="confirmNewPasswordInput"
+        class="form-label"
+        >Confirm new password</label
+      >
+      <input
+        id="confirmNewPasswordInput"
+        placeholder="•••••••"
+        formControlName="confirmPassword"
+        type="password"
+        class="form-control"
+        aria-label="Confirm new password"
+        [ngClass]="{
+          'is-invalid': passwordForm.touched && passwordForm.invalid,
+        }" />
+      @if (passwordForm.hasError('notMatch')) {
+        <div class="invalid-feedback">Passwords do not match.</div>
+      }
+      @if (passwordForm.hasError('required')) {
+        <div class="invalid-feedback">Password is required.</div>
+      }
+    </div>
+  </form>
+</ng-template>

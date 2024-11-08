@@ -1,0 +1,50 @@
+<div
+  class="modal"
+  [id]="data.id"
+  tabindex="-1"
+  [attr.aria-labelledby]="data.title?.id"
+  [attr.aria-hidden]="dialogRef.getState() !== 0">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        @if (data.title?.title) {
+          <h5
+            class="modal-title"
+            [id]="data.title?.id">
+            {{ data.title?.title }}
+          </h5>
+        }
+        @if (data.hasCloseBtn) {
+          <button
+            (click)="dialogRef.close()"
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        }
+      </div>
+      <div class="modal-body">
+        @if (data.inputTemplateRef) {
+          <ng-container [ngTemplateOutlet]="data.inputTemplateRef" />
+        } @else if (data.hasHtml) {
+          <div [innerHTML]="data.bodyContent"></div>
+        } @else {
+          {{ data.bodyContent }}
+        }
+      </div>
+      @if (data.hasFooter) {
+        <div class="modal-footer">
+          @for (btn of data.buttons; track $index) {
+            <button
+              (click)="onClick(btn)"
+              type="button"
+              [classList]="btn.btnClasses.join(' ')"
+              [attr.data-bs-dismiss]="btn.isCloseBtn ? 'modal' : null">
+              {{ btn.text }}
+            </button>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</div>
