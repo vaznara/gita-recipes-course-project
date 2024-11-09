@@ -38,7 +38,7 @@ export interface IIngredientsBlock {
 }
 
 export interface IIngredient {
-  title: string;
+  name: string;
   unit: string;
   quantity: number;
 }
