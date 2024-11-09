@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { ICategory } from '../../shared/interfaces/interface';
+import { ICategoryResponse } from '../../shared/interfaces/interface';
 import { Subject, takeUntil } from 'rxjs';
 import { CategoryService } from '../../shared/services';
 
@@ -14,7 +14,7 @@ import { CategoryService } from '../../shared/services';
 export class CategoriesComponent implements OnInit, OnDestroy {
 
   ngUnsubscribe$: Subject<void> = new Subject();
-  categories: ICategory[] = [];
+  categories: ICategoryResponse[] = [];
 
   constructor(private categoryService: CategoryService) { }
 

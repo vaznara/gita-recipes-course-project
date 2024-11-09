@@ -1,22 +1,35 @@
 import { TemplateRef } from "@angular/core";
 
+export interface IResponseModel<T> {
+  [key: string]: T
+}
+
 export interface ICategory {
-  id: number;
   name: string;
   description: string;
   img: string;
 }
 
 export interface IRecipe {
-  id: number | null;
+  author: string;
   title: string;
-  imgPath: string | null;
-  idCategory: number;
-  //TODO: make mandatory after backend
-  shortDescription?: string;
-  servingCount?: number;
+  imgPath: string;
+  categoryKey: string;
+  shortDescription: string;
+  servingCount: number;
+  preparationTime: number;
   ingredientsBlock?: IIngredientsBlock[];
   steps?: string[];
+}
+
+export interface IRecipeResponse {
+  key: string,
+  recipe: IRecipe
+}
+
+export interface ICategoryResponse {
+  key: string;
+  category: ICategory;
 }
 
 export interface IIngredientsBlock {
@@ -25,7 +38,6 @@ export interface IIngredientsBlock {
 }
 
 export interface IIngredient {
-  id: number;
   title: string;
   unit: string;
   quantity: number;

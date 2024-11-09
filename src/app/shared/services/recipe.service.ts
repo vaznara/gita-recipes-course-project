@@ -1,47 +1,61 @@
 import { Injectable } from '@angular/core';
-import { IRecipe } from '../interfaces/interface';
-import { Observable, of } from 'rxjs';
+import { IRecipe, IResponseModel } from '../interfaces/interface';
+import { map, Observable } from 'rxjs';
+import { ENV_VARIABLES } from '../../../environments/environment.dev';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RecipeService {
 
-  recipesDummyData: IRecipe[] = [
-    { id: 1, idCategory: 1, title: "Decadent Raspberry and Cream Cake ", imgPath: "https://picsum.photos/300/200" },
-    { id: 2, idCategory: 1, title: "Tripple Chocolate Mousse Cake ", imgPath: "https://picsum.photos/300/200" },
-    { id: 3, idCategory: 1, title: "Cranberry Curd Layered Sponge Cake", imgPath: "https://picsum.photos/300/200" },
-    { id: 4, idCategory: 1, title: "Orange and Lemon Curd Tartlets", imgPath: "https://picsum.photos/300/200" },
-    { id: 5, idCategory: 1, title: "Creamt Chocolate Nutella Fudge Cake", imgPath: "https://picsum.photos/300/200" },
-    { id: 6, idCategory: 2, title: "Homemade Mixed Berries Wedding Cake", imgPath: "https://picsum.photos/300/200" },
-    { id: 7, idCategory: 2, title: "Black Forest Birthday Cake", imgPath: "https://picsum.photos/300/200" },
-    { id: 8, idCategory: 2, title: "Double Thick Layered Sponge Cake", imgPath: "https://picsum.photos/300/200" },
-    { id: 9, idCategory: 2, title: "Lemon Cake with Chocolate Ganache", imgPath: "https://picsum.photos/300/200" },
-    { id: 10, idCategory: 2, title: "Cranberry Macaroon Ice Cream Cake  ", imgPath: "https://picsum.photos/300/200" },
-    { id: 11, idCategory: 3, title: "No Bake Cheesecake", imgPath: "https://picsum.photos/300/200" },
-    { id: 12, idCategory: 3, title: "Almond Cinnamon Sponge Cake", imgPath: "https://picsum.photos/300/200" },
-    { id: 13, idCategory: 3, title: "Mixed Candy Cake", imgPath: "https://picsum.photos/300/200" },
-    { id: 14, idCategory: 3, title: "Cherry Ice Cream Cake", imgPath: "https://picsum.photos/300/200" },
-    { id: 15, idCategory: 3, title: "Four Layer Coffee Cake", imgPath: "https://picsum.photos/300/200" },
-    { id: 16, idCategory: 4, title: "Oreo Brownie Ice Cream Cake", imgPath: "https://picsum.photos/300/200" },
-    { id: 17, idCategory: 4, title: "Caramel Glaze Cake", imgPath: "https://picsum.photos/300/200" },
-    { id: 18, idCategory: 4, title: "No Bake Cinnamon Cheesecake", imgPath: "https://picsum.photos/300/200" },
-    { id: 19, idCategory: 4, title: "Apple Cinnamon Bundt Cake", imgPath: "https://picsum.photos/300/200" },
-    { id: 20, idCategory: 4, title: "Rainbow Explosion Birthday Cake", imgPath: "https://picsum.photos/300/200" },
-    { id: 21, idCategory: 5, title: "Chocolate Peanut Butter Mini Cupcakes", imgPath: "https://picsum.photos/300/200" },
-    { id: 22, idCategory: 5, title: "M&M’s Chocolate Cake", imgPath: "https://picsum.photos/300/200" },
-    { id: 23, idCategory: 5, title: "Strawberry Cream Cake Bites", imgPath: "https://picsum.photos/300/200" },
-    { id: 24, idCategory: 5, title: "Tiramisu Cheescake", imgPath: "https://picsum.photos/300/200" },
-    { id: 25, idCategory: 5, title: "Load More", imgPath: "https://picsum.photos/300/200" }
-  ]
+  recipesDummyData: IRecipe[] = []
 
-  constructor() { }
+  private readonly path = `${ENV_VARIABLES.dbPath}/recipes`
+  private readonly pathSuffix = `.json`
 
-  getRecipesByCategoryId(idCategory: number): Observable<IRecipe[] | undefined> {
-    return of(this.recipesDummyData.filter(item => item.idCategory === idCategory))
+  constructor(private http: HttpClient) { }
+
+  getRecipesByCategory(categoryKey: string): Observable<{ key: string, recipe: IRecipe }[]> {
+    return this.http.get<IResponseModel<IRecipe>>(`${this.path + this.pathSuffix}`, { params: this.createQuery('categoryKey', categoryKey) }).pipe(
+      map((data) =>
+        Object.keys(data).map(key => ({
+          key,
+          recipe: data[key]
+        }))
+      )
+    )
   }
 
-  getRecipeById(id: number): Observable<IRecipe | undefined> {
-    return of(this.recipesDummyData.find(item => item.id === id))
+  getRecipes(): Observable<{ key: string, recipe: IRecipe }[]> {
+    return this.http.get<IResponseModel<IRecipe>>(`${this.path + this.pathSuffix}`).pipe(
+      map((data) =>
+        Object.keys(data).map(key => ({
+          key,
+          recipe: data[key]
+        }))
+      )
+    );
+  }
+
+  getRecipe(key: string): Observable<IRecipe> {
+    return this.http.get<IRecipe>(`${this.path}/${key}${this.pathSuffix}`);
+  }
+
+  createRecipe(recipe: IRecipe): Observable<{ name: string }> {
+    return this.http.post<{ name: string }>(`${this.path + this.pathSuffix}`, recipe);
+  }
+
+  deleteRecipe(recipeKey: string): Observable<void> {
+    return this.http.delete<void>(`${this.path}/${recipeKey}${this.pathSuffix}`);
+  }
+
+  editRecipe(recipeKey: string, recipe: IRecipe): Observable<void> {
+    return this.http.patch<void>(`${this.path}/${recipeKey}${this.pathSuffix}`, recipe);
+  }
+
+  createQuery(field: string, value: string): HttpParams {
+    const params = { 'orderBy': `"${field}"`, 'equalTo': `"${value}"` };
+    return new HttpParams({ fromObject: params });
   }
 }
