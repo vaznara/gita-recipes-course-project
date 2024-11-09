@@ -6,6 +6,12 @@
       (ngSubmit)="onSubmit()"
       [formGroup]="recipeForm"
       class="recipe-form">
+      <div class="img-wrapper mb-3">
+        <img
+          [src]="imageSource"
+          alt=""
+          class="recipe-img" />
+      </div>
       <div class="mb-3">
         <label
           for="formFileLg"

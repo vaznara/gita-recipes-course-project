@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService, RecipeService } from '../../shared/services';
 import { concatMap, take } from 'rxjs';
 import { StorageService } from '../../shared/services/storage.service';
-import { ApiErrorHandlerService, RcpError } from '../../shared/services/api-error-handler.service';
+import { RcpError } from '../../shared/services/api-error-handler.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ErrorDialogComponent } from '../../shared/components/error-dialog/error-dialog.component';
 
@@ -33,11 +33,13 @@ export class RecipeEditComponent {
     steps: new FormArray([])
   })
 
+  imageSource: string = 'https://placehold.co/1200x200';
+
   constructor(
     private recipeService: RecipeService,
     private authService: AuthService,
     private storageService: StorageService,
-    private errorHandler: ApiErrorHandlerService,
+    private cdr: ChangeDetectorRef,
     private dialog: MatDialog
   ) { }
 
@@ -47,6 +49,10 @@ export class RecipeEditComponent {
 
   get steps(): FormArray {
     return this.recipeForm.get('steps') as FormArray;
+  }
+
+  get imagePath(): AbstractControl | null {
+    return this.recipeForm.get('imgPath');
   }
 
   getBlockIngredients(idx: number): FormArray {
@@ -100,8 +106,9 @@ export class RecipeEditComponent {
 
     this.storageService.uploadImage(files[0]).pipe(take(1))
       .subscribe(res => {
-        const imagePath = res.metadata.fullPath;
-        this.recipeForm.get('imgPath')?.setValue(imagePath);
+        this.imageSource = res;
+        this.recipeForm.get('imgPath')?.setValue(res);
+        this.cdr.detectChanges();
       })
   }
 
