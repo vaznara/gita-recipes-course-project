@@ -20,6 +20,6 @@ export class SliderComponent implements OnInit {
   recipes?: IRecipe[];
 
   ngOnInit(): void {
-    this.recipeServer.getRecipesByCategoryId(1).subscribe(res => this.recipes = res)
+    // this.recipeServer.getRecipesByCategory("1").subscribe(res => this.recipes = res)
   }
 }

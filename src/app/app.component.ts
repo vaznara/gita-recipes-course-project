@@ -1,5 +1,4 @@
 import { Component, Inject, OnDestroy, OnInit, Renderer2 } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { LayoutComponent } from './layout/layout.component';
 import { AuthService } from './shared/services';
 import { LoaderService } from './shared/services/loader.service';
@@ -9,7 +8,7 @@ import { Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'rcp-root',
   standalone: true,
-  imports: [RouterOutlet, LayoutComponent, AsyncPipe],
+  imports: [LayoutComponent, AsyncPipe],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

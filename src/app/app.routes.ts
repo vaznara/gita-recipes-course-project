@@ -16,17 +16,28 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [loginGuard] },
   { path: 'sign-up', component: SignupComponent, canActivate: [loginGuard] },
   {
-    path: 'recipe', component: RecipeViewComponent, children: [
-      { path: ':id', component: RecipeViewComponent },
-      { path: 'edit/:id', component: RecipeEditComponent, canActivate: [authGuard] },
+    path: 'recipe', children: [
+      { path: ':key', component: RecipeViewComponent },
     ]
   },
   {
     path: 'user', canActivateChild: [authGuard], runGuardsAndResolvers: 'always', children: [
-      { path: 'profile', component: UserProfileComponent }
+      { path: 'profile', component: UserProfileComponent },
+      {
+        path: 'recipe', children: [
+          { path: 'edit/:key', component: RecipeEditComponent, canActivate: [authGuard] },
+          { path: 'new', component: RecipeEditComponent, canActivate: [authGuard] },
+        ]
+      }
+
     ]
   },
+  {
+    path: 'recipes', component: RecipesComponent, children: [
+      { path: 'recipes/category/:key', component: RecipesComponent },
+    ]
+  },
+  { path: 'category/:key', component: RecipesComponent },
   { path: 'categories', component: CategoriesComponent },
-  { path: 'category/:id', component: RecipesComponent },
   { path: '**', component: NotFoundComponent }
 ];

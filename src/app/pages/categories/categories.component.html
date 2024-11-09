@@ -1,17 +1,17 @@
 <h2 class="display-2 mb-5">Categories</h2>
 <div class="row">
-  @for (category of categories; track category.id) {
+  @for (item of categories; track item.key) {
     <a
       href
-      [routerLink]="['/category/' + category.id]"
+      [routerLink]="['/category/' + item.key]"
       routerLinkActive="router-link-active"
       class="col-6 col-sm-3 text-decoration-none">
       <div class="cat-wrapper d-flex flex-column mb-4 gap-2">
         <img
-          [src]="category.img + '?random=' + category.id"
-          [alt]="'Category_' + category.id"
+          [src]="item.category.img"
+          [alt]="'Category_' + item.key"
           class="cat-img rounded-circle" />
-        <h6 class="cat-title text-center">{{ category.name }}</h6>
+        <h6 class="cat-title text-center">{{ item.category.name }}</h6>
       </div>
     </a>
   }

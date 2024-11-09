@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthService, RecipeService } from '../../shared/services';
+import { concatMap } from 'rxjs';
 
 @Component({
   selector: 'rcp-recipe-edit',
@@ -25,6 +27,8 @@ export class RecipeEditComponent {
     instructions: new FormArray([]),
     steps: new FormArray([])
   })
+
+  constructor(private recipeService: RecipeService, private authService: AuthService) { }
 
   get ingredientBlocks(): FormArray {
     return this.recipeForm.get('ingredientsBlock') as FormArray;
@@ -68,5 +72,10 @@ export class RecipeEditComponent {
   }
 
   onSubmit(): void {
+    this.authService.currentUser$.pipe(
+      concatMap(user => {
+        return this.recipeService.createRecipe({ ...this.recipeForm.value, author: user?.uid })
+      })
+    ).subscribe(res => console.log(res))
   }
 }

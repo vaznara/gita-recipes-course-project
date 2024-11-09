@@ -20,7 +20,7 @@ export class PopularCategoriesComponent implements OnInit {
 
   ngOnInit(): void {
     this.categoryService.getCategories().subscribe(res => {
-      this.categories = res.slice(0, this.MAX_LENGTH)
+      // this.categories = res.slice(0, this.MAX_LENGTH)
     })
   }
 }

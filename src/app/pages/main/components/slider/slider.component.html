@@ -2,7 +2,7 @@
   id="mainSlider"
   class="carousel slide">
   <div class="carousel-indicators">
-    @for (item of [].constructor(recipes?.length); track $index) {
+    <!-- @for (item of [].constructor(recipes?.length); track $index) {
       <button
         type="button"
         data-bs-target="#mainSlider"
@@ -10,16 +10,16 @@
         [ngClass]="{ active: $index === 0 }"
         [attr.aria-current]="$index === 0"
         [attr.aria-label]="'Slide ' + $index"></button>
-    }
+    } -->
   </div>
   <div class="carousel-inner">
-    @for (item of recipes; track item.id) {
+    <!-- @for (item of recipes; track $index) {
       <div
         class="carousel-item"
         [ngClass]="{ active: $index === 0 }">
         <rcp-slide [slide]="item" />
       </div>
-    }
+    } -->
   </div>
   <button
     class="carousel-control-prev"

@@ -19,6 +19,6 @@ export class MainComponent implements OnInit {
   constructor(private recipeService: RecipeService) { }
 
   ngOnInit(): void {
-    this.recipeService.getRecipesByCategoryId(2).subscribe(res => this.featuredRecipes = res ?? []);
+    // this.recipeService.getRecipesByCategory("2").subscribe(res => this.featuredRecipes = res ?? []);
   }
 }
