@@ -26,11 +26,19 @@ export class RecipeEditComponent {
     ingredientsBlock: new FormArray([
       new FormGroup({
         ingredientsBlocktitle: new FormControl(''),
-        ingredients: new FormArray([])
+        ingredients: new FormArray([
+          new FormGroup({
+            name: new FormControl('', [Validators.required]),
+            unit: new FormControl('', [Validators.required]),
+            quantity: new FormControl(0.1, [Validators.required, Validators.min(0.1)])
+          })
+        ])
       })
     ]),
     instructions: new FormArray([]),
-    steps: new FormArray([])
+    steps: new FormArray([
+      new FormControl('', [Validators.required])
+    ])
   })
 
   imageSource: string = 'https://placehold.co/1200x200';
@@ -71,9 +79,15 @@ export class RecipeEditComponent {
   }
 
   addIngredient(idx: number): void {
-    this.getBlockIngredients(idx).push(
-      new FormControl('')
-    )
+    this.getBlockIngredients(idx).push(this.ingredientFormGroup);
+  }
+
+  get ingredientFormGroup(): FormGroup {
+    return new FormGroup({
+      name: new FormControl('', [Validators.required]),
+      unit: new FormControl('', [Validators.required]),
+      quantity: new FormControl(0.1, [Validators.required, Validators.min(0.1)])
+    })
   }
 
   removeIngredient(idx: number, ingIdx: number): void {
@@ -85,7 +99,7 @@ export class RecipeEditComponent {
   }
 
   addStep(): void {
-    this.steps.push(new FormControl(''));
+    this.steps.push(new FormControl('', [Validators.required]));
   }
 
   uploadImage(event: Event): void {
