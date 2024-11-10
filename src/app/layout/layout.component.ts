@@ -24,7 +24,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.breadcrumbService.breadcrumbs$.pipe(takeUntil(this.ngUnsubscribe$))
       .subscribe(res => {
-        this.shouldShowBreadcrumb = res.length !== 1;
+        this.shouldShowBreadcrumb = res.size !== 1;
       })
   }
 

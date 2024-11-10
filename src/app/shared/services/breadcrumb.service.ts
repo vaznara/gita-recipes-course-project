@@ -8,7 +8,7 @@ import { IBreadcrumb } from '../interfaces/interface';
 })
 export class BreadcrumbService {
 
-  private _breadcrumbs$: BehaviorSubject<IBreadcrumb[]> = new BehaviorSubject([] as IBreadcrumb[]);
+  private _breadcrumbs$: BehaviorSubject<Set<IBreadcrumb>> = new BehaviorSubject(new Set());
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute) {
     this.router.events.pipe(
@@ -18,7 +18,7 @@ export class BreadcrumbService {
     });
   }
 
-  private buildPath(route: ActivatedRoute, url: string = '', breadcrumbs: IBreadcrumb[] = []): IBreadcrumb[] {
+  private buildPath(route: ActivatedRoute, url: string = '', breadcrumbs: Set<IBreadcrumb> = new Set()): Set<IBreadcrumb> {
     const children: ActivatedRoute[] = route.children;
 
     if (children.length === 0) {
@@ -31,14 +31,14 @@ export class BreadcrumbService {
         url += `/${routeURL}`;
       }
 
-      breadcrumbs.push({ label: child.snapshot.data['breadcrumb'], url });
+      breadcrumbs.add({ label: child.snapshot.data['breadcrumb'], url });
       return this.buildPath(child, url, breadcrumbs);
     }
 
     return breadcrumbs;
   }
 
-  get breadcrumbs$(): Observable<IBreadcrumb[]> {
+  get breadcrumbs$(): Observable<Set<IBreadcrumb>> {
     return this._breadcrumbs$.asObservable();
   }
 }

@@ -15,14 +15,13 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe$: Subject<void> = new Subject();
 
-  breadcrumbs: IBreadcrumb[] = [];
+  breadcrumbs: Set<IBreadcrumb> = new Set();
 
   constructor(private breadcrumbService: BreadcrumbService) { }
 
   ngOnInit(): void {
     this.breadcrumbService.breadcrumbs$.pipe(takeUntil(this.ngUnsubscribe$))
       .subscribe(res => {
-        console.log(res)
         this.breadcrumbs = res
       })
   }

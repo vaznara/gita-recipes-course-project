@@ -29,7 +29,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.route.paramMap.pipe(
+    this.route.queryParamMap.pipe(
       takeUntil(this.ngUnsubscribe$),
       concatMap(res => {
         this.categoryKey = res.get('key');

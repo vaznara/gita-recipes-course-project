@@ -3,7 +3,8 @@
   @for (item of categories; track item.key) {
     <a
       href
-      [routerLink]="['/recipes/category/' + item.key]"
+      [routerLink]="['/recipes']"
+      [queryParams]="{ key: item.key }"
       routerLinkActive="router-link-active"
       class="col-6 col-sm-3 text-decoration-none position-relative">
       <div class="category-wrapper position-relative d-flex flex-column mb-4 gap-2">
