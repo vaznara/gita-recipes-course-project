@@ -6,11 +6,12 @@ import { IRecipe } from '../../shared/interfaces/interface';
 import { RecipeHeaderComponent } from './components/recipe-header/recipe-header.component';
 import { RecipeIngredientsComponent } from './components/recipe-ingredients/recipe-ingredients.component';
 import { RecipeStepsComponent } from './components/recipe-steps/recipe-steps.component';
+import { UserAccessDirective } from '../../shared/directives/user-access.directive';
 
 @Component({
   selector: 'rcp-recipe-view',
   standalone: true,
-  imports: [RecipeHeaderComponent, RecipeIngredientsComponent, RecipeStepsComponent],
+  imports: [RecipeHeaderComponent, RecipeIngredientsComponent, RecipeStepsComponent, UserAccessDirective],
   templateUrl: './recipe-view.component.html',
   styleUrl: './recipe-view.component.scss'
 })
@@ -18,6 +19,7 @@ export class RecipeViewComponent implements OnInit, OnDestroy {
 
   private readonly ngUnsubscribe$: Subject<void> = new Subject();
 
+  recipeKey: string | null = null;
   recipe?: IRecipe;
 
   constructor(
@@ -30,15 +32,19 @@ export class RecipeViewComponent implements OnInit, OnDestroy {
     this.route.paramMap.pipe(
       takeUntil(this.ngUnsubscribe$),
       concatMap((params) => {
-        const key = params.get('key');
-        if (!key) {
+        this.recipeKey = params.get('key');
+        if (!this.recipeKey) {
           this.router.navigate(['/recipes']);
           return EMPTY;
         }
 
-        return this.recipeService.getRecipe(key)
+        return this.recipeService.getRecipe(this.recipeKey)
       })
     ).subscribe(res => this.recipe = res)
+  }
+
+  onEdit(): void {
+    this.router.navigate([`/user/recipe/edit/${this.recipeKey}`]);
   }
 
   ngOnDestroy(): void {
