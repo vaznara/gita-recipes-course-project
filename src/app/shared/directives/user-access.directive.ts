@@ -1,4 +1,4 @@
-import { AfterViewInit, Directive, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, Input, OnDestroy } from '@angular/core';
 import { AuthService } from '../services';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -20,7 +20,6 @@ export class UserAccessDirective implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.authService.currentUser$.pipe(takeUntil(this.ngUnsubscribe$))
       .subscribe(user => {
-        console.log(this.contentOwnerUid)
         if (!this.contentOwnerUid || user?.uid !== this.contentOwnerUid) {
           this.elementRef.nativeElement.remove();
         }

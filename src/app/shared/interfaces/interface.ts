@@ -80,3 +80,8 @@ export interface IDialogDataButton {
   btnClasses: string[];
   isCloseBtn: boolean;
 }
+
+export interface IBreadcrumb {
+  label: string;
+  url: string
+}

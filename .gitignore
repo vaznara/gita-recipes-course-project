@@ -47,4 +47,4 @@ Thumbs.db
 .runtimeconfig.json
 
 # environment files
-src/environments
+src/environments/env*

@@ -13,34 +13,35 @@ import { UserProfileComponent } from './pages/user-profile/user-profile.componen
 import { RecipesComponent as UserRecipesComponent } from './pages/user/pages/recipes/recipes.component';
 
 export const routes: Routes = [
-  { path: '', component: MainComponent, title: 'Welcome to recipes' },
-  { path: 'login', component: LoginComponent, canActivate: [loginGuard], title: 'Please login' },
-  { path: 'sign-up', component: SignupComponent, canActivate: [loginGuard], title: 'Welcome!' },
+  { path: '', component: MainComponent, title: 'Welcome to recipes', data: { breadcrumb: 'Homepage' } },
+  { path: 'login', component: LoginComponent, canActivate: [loginGuard], title: 'Please login', data: { breadcrumb: 'Login' } },
+  { path: 'sign-up', component: SignupComponent, canActivate: [loginGuard], title: 'Welcome!', data: { breadcrumb: 'Sign-up' } },
   {
-    path: 'recipe', children: [
-      { path: 'view', component: RecipeViewComponent },
-      { path: 'view/:key', component: RecipeViewComponent },
+    path: 'recipe', data: { breadcrumb: 'Recipe' }, children: [
+      { path: '', redirectTo: '/recipes', pathMatch: 'full' },
+      { path: 'view', component: RecipeViewComponent, data: { breadcrumb: 'View recipe' } },
+      { path: 'view/:key', component: RecipeViewComponent, data: { breadcrumb: 'View recipe' } },
     ]
   },
   {
-    path: 'user', canActivateChild: [authGuard], runGuardsAndResolvers: 'always', children: [
-      { path: 'profile', component: UserProfileComponent },
-      { path: 'recipes', component: UserRecipesComponent, title: 'My Delicious recipes list' },
+    path: 'user', canActivateChild: [authGuard], runGuardsAndResolvers: 'always', data: { breadcrumb: 'User' }, children: [
+      { path: 'profile', component: UserProfileComponent, data: { breadcrumb: 'User profile' } },
+      { path: 'recipes', component: UserRecipesComponent, title: 'My Delicious recipes list', data: { breadcrumb: 'User recipes' } },
       {
-        path: 'recipe', children: [
-          { path: 'edit', component: RecipeEditComponent, canActivate: [authGuard] },
-          { path: 'new', component: RecipeEditComponent, canActivate: [authGuard], title: 'Create new recipe' },
+        path: 'recipe', data: { breadcrumb: 'Recipe' }, children: [
+          { path: 'edit', component: RecipeEditComponent, canActivate: [authGuard], data: { breadcrumb: 'Edit recipe' } },
+          { path: 'new', component: RecipeEditComponent, canActivate: [authGuard], title: 'Create new recipe', data: { breadcrumb: 'New recipe' } },
         ]
       }
 
     ]
   },
   {
-    path: 'recipes', children: [
-      { path: 'category/:key', component: RecipesComponent },
-      { path: '', component: RecipesComponent, title: 'Delicious recipes list' },
+    path: 'recipes', data: { breadcrumb: 'Recipes' }, children: [
+      { path: 'category/:key', component: RecipesComponent, data: { breadcrumb: 'Category page' } },
+      { path: '', component: RecipesComponent, title: 'Delicious recipes list', data: { breadcrumb: 'Recipes' } },
     ]
   },
-  { path: 'categories', component: CategoriesComponent, title: 'Categories list' },
-  { path: '**', component: NotFoundComponent, title: 'We are sorry! This page doesn\'t exists' }
+  { path: 'categories', component: CategoriesComponent, title: 'Categories list', data: { breadcrumb: 'Categories' } },
+  { path: '**', component: NotFoundComponent, title: 'We are sorry! This page doesn\'t exists', data: { breadcrumb: 'Not found' } }
 ];
