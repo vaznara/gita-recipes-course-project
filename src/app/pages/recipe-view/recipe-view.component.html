@@ -1,70 +1,88 @@
-<div class="row">
-  <div class="col-12">
-    <rcp-recipe-header />
-  </div>
-  <h1 class="recipe-title display-2 my-4">{{ recipe?.title }}</h1>
-  <div class="d-flex justify-content-start align-items-center recipe-settings gap-5">
-    <div class="recipe-author d-flex gap-2 align-items-center">
+@if (recipe) {
+  <div class="row">
+    <div class="col-12">
+      <rcp-recipe-header />
+    </div>
+    <h1 class="recipe-title display-2 my-4">{{ recipe.title }}</h1>
+    <div class="d-flex justify-content-start align-items-center recipe-settings gap-5">
+      <div class="recipe-author d-flex gap-2 align-items-center">
+        <img
+          [src]="'author.png'"
+          alt=""
+          class="author-img rounded-circle" /><span class="author-name">Tricia Albert</span>
+      </div>
+      <div class="recipe-date d-flex gap-2 align-items-center">
+        <i class="bi bi-calendar-check"></i>
+        <span>Yesterday</span>
+      </div>
+      <div class="recipe-comments d-flex gap-2 align-items-center">
+        <i class="bi bi-chat"></i>
+        <span>25</span>
+      </div>
+      <div class="recipe-ratings d-flex gap-1">
+        @for (i of [].constructor(4); track $index) {
+          <i class="bi bi-star-fill text-primary"></i>
+        }
+      </div>
+    </div>
+    <hr class="my-3" />
+    <div class="recipe-short-description">
+      <p class="description-paragraph m-0">
+        {{ recipe.shortDescription }}
+      </p>
+    </div>
+    <div class="recipe-img-wrapper my-4 round-1">
       <img
-        [src]="'author.png'"
-        alt=""
-        class="author-img rounded-circle" /><span class="author-name">Tricia Albert</span>
+        [src]="recipe.imgPath || 'https://placehold.co/800x600'"
+        [alt]="recipe.title"
+        class="recipe-img" />
     </div>
-    <div class="recipe-date d-flex gap-2 align-items-center">
-      <i class="bi bi-calendar-check"></i>
-      <span>Yesterday</span>
+    <div class="recipe-info d-flex gap-5 align-items-center">
+      <div class="recipe-info-item d-flex flex-column gap-1 border-end pe-4">
+        <p class="info-title m-0">PREP TIME</p>
+        <p class="info-value m-0">{{ recipe.preparationTime }} MIN</p>
+      </div>
+      <div class="recipe-info-item d-flex flex-column gap-1 border-end pe-4">
+        <p class="info-title m-0">SERVINGS</p>
+        <p class="info-value m-0">{{ recipe.servingCount }} PEOPLE</p>
+      </div>
+      <div class="recipe-print">
+        <button
+          class="btn p-0"
+          type="button">
+          <i class="bi bi-printer fs-5"></i>
+        </button>
+      </div>
+      <div
+        [rcpUserAccess]="recipe.author"
+        class="recipe-edit">
+        <button
+          (click)="onEdit()"
+          class="btn p-0"
+          type="button">
+          <i class="bi bi-pencil-square fs-5"></i>
+        </button>
+      </div>
     </div>
-    <div class="recipe-comments d-flex gap-2 align-items-center">
-      <i class="bi bi-chat"></i>
-      <span>25</span>
-    </div>
-    <div class="recipe-ratings d-flex gap-1">
-      @for (i of [].constructor(4); track $index) {
-        <i class="bi bi-star-fill text-primary"></i>
-      }
-    </div>
-  </div>
-  <hr class="my-3" />
-  <div class="recipe-short-description">
-    <p class="description-paragraph m-0">
-      {{ recipe?.shortDescription }}
-    </p>
-  </div>
-  <div class="recipe-img-wrapper my-4 round-1">
-    <img
-      [src]="recipe?.imgPath ?? 'https://placehold.co/800x600'"
-      [alt]="recipe?.title"
-      class="recipe-img" />
-  </div>
-  <div class="recipe-info d-flex gap-5 align-items-center">
-    <div class="recipe-info-item d-flex flex-column gap-1 border-end pe-4">
-      <p class="info-title m-0">PREP TIME</p>
-      <p class="info-value m-0">{{ recipe?.preparationTime }} MIN</p>
-    </div>
-    <div class="recipe-info-item d-flex flex-column gap-1 border-end pe-4">
-      <p class="info-title m-0">SERVINGS</p>
-      <p class="info-value m-0">{{ recipe?.servingCount }} PEOPLE</p>
-    </div>
-    <div class="recipe-print"><i class="bi bi-printer fs-5"></i></div>
-  </div>
-  <div class="row recipe-content mt-5">
-    <div class="col-12 col-sm-5 recipe-ingredients-col">
-      <h5 class="ingredients-title display-6 mb-5">Ingredients</h5>
-      @for (ingredientsBlock of recipe?.ingredientsBlock; track $index) {
-        <div class="ingredients-block mb-5">
-          <h6 class="ingredients-list-title fw-bold mb-3">
-            {{ ingredientsBlock.ingredientsBlockTitle }}
-          </h6>
-          <rcp-recipe-ingredients [ingredients]="ingredientsBlock.ingredients" />
+    <div class="row recipe-content mt-5">
+      <div class="col-12 col-sm-5 recipe-ingredients-col">
+        <h5 class="ingredients-title display-6 mb-5">Ingredients</h5>
+        @for (ingredientsBlock of recipe.ingredientsBlock; track $index) {
+          <div class="ingredients-block mb-5">
+            <h6 class="ingredients-list-title fw-bold mb-3">
+              {{ ingredientsBlock.ingredientsBlockTitle }}
+            </h6>
+            <rcp-recipe-ingredients [ingredients]="ingredientsBlock.ingredients" />
+          </div>
+        }
+      </div>
+      @if (recipe.steps) {
+        <div class="col-12 col-sm-7 recipe-instructions">
+          <h6 class="instructions-title display-6 mb-5">Instructions</h6>
+          <rcp-recipe-steps [steps]="recipe.steps" />
         </div>
       }
     </div>
-    @if (recipe?.steps) {
-      <div class="col-12 col-sm-7 recipe-instructions">
-        <h6 class="instructions-title display-6 mb-5">Instructions</h6>
-        <rcp-recipe-steps [steps]="recipe?.steps ?? []" />
-      </div>
-    }
+    <div class="recipe-feedback"></div>
   </div>
-  <div class="recipe-feedback"></div>
-</div>
+}
