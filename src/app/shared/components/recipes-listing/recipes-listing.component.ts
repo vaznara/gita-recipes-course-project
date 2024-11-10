@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ICategory, IRecipeResponse } from '../../interfaces/interface';
 import { RecipeCardComponent } from '../recipe-card/recipe-card.component';
 
@@ -7,7 +7,8 @@ import { RecipeCardComponent } from '../recipe-card/recipe-card.component';
   standalone: true,
   imports: [RecipeCardComponent],
   templateUrl: './recipes-listing.component.html',
-  styleUrl: './recipes-listing.component.scss'
+  styleUrl: './recipes-listing.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RecipesListingComponent {
 
