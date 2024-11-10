@@ -8,7 +8,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ErrorDialogComponent } from '../../shared/components/error-dialog/error-dialog.component';
 import { ICategoryResponse, IIngredient, IRecipeResponse } from '../../shared/interfaces/interface';
 import { NgClass } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'rcp-recipe-edit',
@@ -46,7 +47,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     private categoryService: CategoryService,
     private cdr: ChangeDetectorRef,
     private dialog: MatDialog,
-    private route: ActivatedRoute,
+    private titleService: Title,
     private router: Router
   ) { }
 
@@ -60,6 +61,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     const recipe = history.state.recipe;
 
     if (recipe) {
+      this.titleService.setTitle(`Edit recipe: ${recipe.recipe.title}`)
       this.patchValue(recipe);
     } else {
       this.ingredientBlocks.push(this.ingredientsBlockFormGroup);
