@@ -13,34 +13,9 @@
 @if (recipes.length) {
   <div class="row">
     @for (item of recipes; track item.key) {
-      <a
-        href
-        [routerLink]="['/recipe/' + item.key]"
-        class="col-6 col-md-3 mb-5 text-decoration-none">
-        <div class="cat-wrapper d-flex flex-column mb-4 gap-2">
-          <img
-            [src]="item.recipe.imgPath"
-            [alt]="item.recipe.title"
-            class="cat-img" />
-          <div class="recipe-ratings d-flex gap-1">
-            @for (i of [].constructor(4); track $index) {
-              <i class="bi bi-star-fill text-primary"></i>
-            }
-          </div>
-          <div class="recipe-actions d-flex align-items-center">
-            <h6 class="flex-grow-1 py-1">{{ item.recipe.title }}</h6>
-            <div class="actions">
-              <button
-                [rcpUserAccess]="item.recipe.author"
-                class="btn p-0"
-                role="button"
-                (click)="onEdit(item); $event.stopPropagation(); $event.preventDefault()">
-                <i class="bi bi-pencil-square text-primary fs-5"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      </a>
+      <div class="col-6 col-md-3">
+        <rcp-recipe-card [recipe]="item" />
+      </div>
     }
   </div>
 }

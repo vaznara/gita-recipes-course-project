@@ -1,7 +1,7 @@
 @if (recipe) {
   <div class="row">
     <div class="col-12">
-      <rcp-recipe-header />
+      <rcp-recipe-header [recipeKey]="recipeKey" />
     </div>
     <h1 class="recipe-title display-2 my-4">{{ recipe.title }}</h1>
     <div class="d-flex justify-content-start align-items-center recipe-settings gap-5">
@@ -48,6 +48,7 @@
       </div>
       <div class="recipe-print">
         <button
+          (click)="onPrint()"
           class="btn p-0"
           type="button">
           <i class="bi bi-printer fs-5"></i>

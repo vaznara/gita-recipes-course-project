@@ -1,0 +1,32 @@
+@if (recipe) {
+  <a
+    href
+    (click)="onView(); $event.stopPropagation(); $event.preventDefault()"
+    routerLinkActive="router-link-active"
+    class="text-decoration-none position-relative">
+    <div class="recipe-wrapper position-relative d-flex flex-column mb-4 gap-2">
+      <div class="recipe-image-wrapper">
+        <span
+          class="recipe-background d-block rounded-1"
+          [ngStyle]="{ 'background-image': 'url(' + recipe.recipe.imgPath }"></span>
+      </div>
+      <div class="recipe-ratings d-flex gap-1">
+        @for (i of [].constructor(4); track $index) {
+          <i class="bi bi-star-fill text-primary"></i>
+        }
+      </div>
+      <div class="recipe-actions d-flex align-items-center">
+        <h6 class="flex-grow-1 py-1">{{ recipe.recipe.title }}</h6>
+        <div class="actions">
+          <button
+            [rcpUserAccess]="recipe.recipe.author"
+            class="btn p-0"
+            role="button"
+            (click)="onEdit(); $event.stopPropagation(); $event.preventDefault()">
+            <i class="bi bi-pencil-square text-primary fs-5"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </a>
+}

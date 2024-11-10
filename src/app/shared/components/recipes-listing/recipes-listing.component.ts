@@ -1,12 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { ICategory, IRecipeResponse } from '../../interfaces/interface';
-import { Router, RouterLink } from '@angular/router';
-import { UserAccessDirective } from '../../directives/user-access.directive';
+import { RecipeCardComponent } from '../recipe-card/recipe-card.component';
 
 @Component({
   selector: 'rcp-recipes-listing',
   standalone: true,
-  imports: [RouterLink, UserAccessDirective],
+  imports: [RecipeCardComponent],
   templateUrl: './recipes-listing.component.html',
   styleUrl: './recipes-listing.component.scss'
 })
@@ -15,9 +14,4 @@ export class RecipesListingComponent {
   @Input() category: ICategory | null = null;
   @Input() recipes: IRecipeResponse[] = [];
 
-  constructor(private router: Router) { }
-
-  onEdit(recipe: IRecipeResponse): void {
-    this.router.navigate([`/user/recipe/edit`], { state: { recipe } });
-  }
 }

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RecipeService } from '../../shared/services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { concatMap, EMPTY, Subject, takeUntil } from 'rxjs';
-import { IRecipe } from '../../shared/interfaces/interface';
+import { IRecipe, IRecipeResponse } from '../../shared/interfaces/interface';
 import { RecipeHeaderComponent } from './components/recipe-header/recipe-header.component';
 import { RecipeIngredientsComponent } from './components/recipe-ingredients/recipe-ingredients.component';
 import { RecipeStepsComponent } from './components/recipe-steps/recipe-steps.component';
@@ -29,18 +29,27 @@ export class RecipeViewComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.route.paramMap.pipe(
-      takeUntil(this.ngUnsubscribe$),
-      concatMap((params) => {
-        this.recipeKey = params.get('key');
-        if (!this.recipeKey) {
-          this.router.navigate(['/recipes']);
-          return EMPTY;
-        }
+    const recipe = history.state.recipe as IRecipeResponse;
+    if (recipe) {
+      this.recipeKey = recipe.key;
+      this.recipe = recipe.recipe;
+    } else {
+      this.route.paramMap.pipe(
+        takeUntil(this.ngUnsubscribe$),
+        concatMap((params) => {
+          this.recipeKey = params.get('key');
+          if (!this.recipeKey) {
+            this.router.navigate(['/recipes']);
+            return EMPTY;
+          }
+          return this.recipeService.getRecipe(this.recipeKey)
+        })
+      ).subscribe(res => this.recipe = res)
+    }
+  }
 
-        return this.recipeService.getRecipe(this.recipeKey)
-      })
-    ).subscribe(res => this.recipe = res)
+  onPrint(): void {
+    window.print();
   }
 
   onEdit(): void {
