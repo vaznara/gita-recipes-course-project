@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { takeUntil, concatMap, Subject, EMPTY } from 'rxjs';
 import { AuthService, RecipeService } from '../../../../shared/services';
@@ -10,8 +10,7 @@ import { RecipesListingComponent } from '../../../../shared/components/recipes-l
   standalone: true,
   imports: [RecipesListingComponent],
   templateUrl: './recipes.component.html',
-  styleUrl: './recipes.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './recipes.component.scss'
 })
 export class RecipesComponent implements OnInit, OnDestroy {
   private readonly ngUnsubscribe$: Subject<void> = new Subject();
@@ -22,7 +21,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private recipeService: RecipeService,
     private router: Router,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.authService.currentUser$
