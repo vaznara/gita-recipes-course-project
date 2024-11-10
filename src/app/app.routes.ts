@@ -18,7 +18,8 @@ export const routes: Routes = [
   { path: 'sign-up', component: SignupComponent, canActivate: [loginGuard] },
   {
     path: 'recipe', children: [
-      { path: ':key', component: RecipeViewComponent },
+      { path: 'view', component: RecipeViewComponent },
+      { path: 'view/:key', component: RecipeViewComponent },
     ]
   },
   {

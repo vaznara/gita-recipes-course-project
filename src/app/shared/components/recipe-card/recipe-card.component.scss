@@ -1,0 +1,13 @@
+.recipe-image-wrapper {
+  width: 100%;
+  height: auto;
+  position: relative;
+
+  .recipe-background {
+    width: 100%;
+    padding-top: 75%;
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+}
