@@ -29,8 +29,8 @@ export class CategoryService {
     return this.http.get<ICategory>(`${this.path}/${categoryKey}${this.pathSuffix}`)
   }
 
-  createCategory(categoryKey: string, category: ICategory): Observable<IResponseModel<ICategory>> {
-    return this.http.post<IResponseModel<ICategory>>(`${this.path}/${categoryKey}${this.pathSuffix}`, category)
+  createCategory(category: ICategory): Observable<{ name: string }> {
+    return this.http.post<{ name: string }>(`${this.path + this.pathSuffix}`, category)
   }
 
   editCategory(categoryKey: string, category: ICategory): Observable<IResponseModel<ICategory>> {

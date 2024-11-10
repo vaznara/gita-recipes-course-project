@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ICategory, IRecipeResponse } from '../../shared/interfaces/interface';
-import { concatMap, Subject, takeUntil } from 'rxjs';
-import { RecipeService } from '../../shared/services';
+import { concatMap, of, Subject, takeUntil } from 'rxjs';
+import { CategoryService, RecipeService } from '../../shared/services';
 
 @Component({
   selector: 'rcp-recipes',
@@ -15,11 +15,13 @@ export class RecipesComponent implements OnInit, OnDestroy {
 
   ngUnsubscribe$: Subject<void> = new Subject();
 
-  category?: ICategory;
+  category: ICategory | null = null;
+  categoryKey: string | null = null;
   recipes: IRecipeResponse[] = [];
 
   constructor(private route: ActivatedRoute,
-    private recipeService: RecipeService) {
+    private recipeService: RecipeService,
+    private categoryService: CategoryService) {
 
   }
 
@@ -27,8 +29,13 @@ export class RecipesComponent implements OnInit, OnDestroy {
     this.route.paramMap.pipe(
       takeUntil(this.ngUnsubscribe$),
       concatMap(res => {
-        const categoryKey = res.get('key');
-        return categoryKey ? this.recipeService.getRecipesByCategory(categoryKey) : this.recipeService.getRecipes();
+        this.categoryKey = res.get('key');
+        if (!this.categoryKey) return of(null);
+        return this.categoryService.getCategory(this.categoryKey);
+      }),
+      concatMap((category) => {
+        this.category = category;
+        return this.categoryKey ? this.recipeService.getRecipesByCategory(this.categoryKey) : this.recipeService.getRecipes();
       })
     )
       .subscribe(res => {
