@@ -1,6 +1,13 @@
 <header class="header">
   <rcp-header />
 </header>
+@if (shouldShowBreadcrumb) {
+  <div class="breadcrumb-container bg-secondary py-2 acontainer-fluid">
+    <div class="container">
+      <rcp-breadcrumb />
+    </div>
+  </div>
+}
 <main class="content flex-grow-1 py-4">
   <div class="container">
     <router-outlet />
