@@ -38,6 +38,20 @@ export class RecipeService {
     );
   }
 
+  getUserRecipes(userId: string): Observable<{ key: string, recipe: IRecipe }[]> {
+    return this.http.get<IResponseModel<IRecipe>>(
+      `${this.path + this.pathSuffix}`,
+      { params: this.createQuery('author', userId) }
+    ).pipe(
+      map((data) =>
+        Object.keys(data).map(key => ({
+          key,
+          recipe: data[key]
+        }))
+      )
+    );
+  }
+
   getRecipe(key: string): Observable<IRecipe> {
     return this.http.get<IRecipe>(`${this.path}/${key}${this.pathSuffix}`);
   }

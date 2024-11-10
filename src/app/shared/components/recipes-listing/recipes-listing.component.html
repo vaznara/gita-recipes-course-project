@@ -1,0 +1,35 @@
+@if (category) {
+  <div class="page-title-wrapper mb-5">
+    <div class="page-title d-flex gap-3 align-items-center">
+      <h2 class="display-2">
+        {{ category.name }}
+      </h2>
+      <span class="fst-italic">({{ recipes.length }} recipes)</span>
+    </div>
+
+    <p>{{ category.description }}</p>
+  </div>
+}
+@if (recipes) {
+  <div class="row">
+    @for (item of recipes; track item.key) {
+      <a
+        href
+        [routerLink]="['/recipe/' + item.key]"
+        class="col-6 col-md-3 mb-5 text-decoration-none">
+        <div class="cat-wrapper d-flex flex-column mb-4 gap-2">
+          <img
+            [src]="item.recipe.imgPath"
+            [alt]="item.recipe.title"
+            class="cat-img" />
+          <div class="recipe-ratings d-flex gap-1">
+            @for (i of [].constructor(4); track $index) {
+              <i class="bi bi-star-fill text-primary"></i>
+            }
+          </div>
+          <h6>{{ item.recipe.title }}</h6>
+        </div>
+      </a>
+    }
+  </div>
+}
