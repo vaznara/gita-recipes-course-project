@@ -2,3 +2,36 @@
   width: 1.5rem;
   height: 1.5rem;
 }
+
+.image-icon {
+  font-size: 5rem;
+}
+
+.img-wrapper label {
+  cursor: pointer;
+}
+
+.image-upload-action-uploaded {
+  &::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: var(--rcp-white);
+    opacity: 0;
+  }
+
+  span {
+    opacity: 0;
+  }
+}
+
+.image-upload-action-uploaded:hover {
+  &::before {
+    opacity: 0.25;
+  }
+
+  span {
+    opacity: 1;
+  }
+}

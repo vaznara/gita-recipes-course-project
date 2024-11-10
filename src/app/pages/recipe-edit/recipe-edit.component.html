@@ -7,22 +7,44 @@
       [formGroup]="recipeForm"
       class="recipe-form">
       <div class="img-wrapper mb-3">
-        <img
-          [src]="imageSource"
-          alt=""
-          class="recipe-img" />
+        @if (!imagePath?.value) {
+          <label
+            for="imageUpload"
+            class="form-label d-block image-upload-action">
+            <div
+              class="image-placeholder py-5 w-100 d-flex justify-content-center align-items-center">
+              <i
+                class="bi bi-cloud-arrow-up-fill image-icon"
+                [ngClass]="{
+                  'text-primary': imagePath?.pristine,
+                  'text-danger': imagePath?.touched && imagePath?.invalid,
+                }"></i>
+            </div>
+          </label>
+        }
+        @if (imagePath?.value) {
+          <label
+            for="imageUpload"
+            class="form-label d-inline-block image-upload-action-uploaded position-relative">
+            <img
+              [src]="imagePath?.value"
+              alt="Recipe image"
+              class="recipe-img" />
+            <span
+              type="button"
+              class="btn btn-primary text-white position-absolute top-50 start-50 translate-middle">
+              Change image
+            </span>
+          </label>
+        }
       </div>
       <div class="mb-3">
-        <label
-          for="formFileLg"
-          class="form-label"
-          >Upload image</label
-        >
         <input
-          class="form-control"
-          id="formFileLg"
+          hidden
+          class="form-control visibility-hidden"
+          id="imageUpload"
           accept="image/png, image/jpeg"
-          (change)="uploadImage($event)"
+          (change)="handleImage($event)"
           type="file" />
       </div>
       <div class="mb-3">
@@ -43,8 +65,14 @@
         </div>
       </div>
       <div class="mb-3">
+        <label
+          for="categorySelect"
+          class="form-label"
+          >Select category</label
+        >
         <select
           class="form-select"
+          id="categorySelect"
           formControlName="categoryKey"
           aria-label="category select">
           <option
