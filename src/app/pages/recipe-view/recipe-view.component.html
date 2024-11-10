@@ -1,17 +1,8 @@
 <div class="row">
   <div class="col-12">
-    <div class="row justify-content-between">
-      <div class="col-6 recipe-stats d-flex gap-3">
-        <i class="bi bi-graph-up fs-5"></i>
-        <span class="popularity">85% would make this again</span>
-      </div>
-      <div class="col-6 recipe-actions d-flex gap-3 justify-content-end">
-        <i class="bi bi-share fs-5"></i>
-        <i class="bi bi-bookmark fs-5"></i>
-      </div>
-    </div>
+    <rcp-recipe-header />
   </div>
-  <h1 class="recipe-title display-2 my-4">Strawberry Cream Cheesecake</h1>
+  <h1 class="recipe-title display-2 my-4">{{ recipe?.title }}</h1>
   <div class="d-flex justify-content-start align-items-center recipe-settings gap-5">
     <div class="recipe-author d-flex gap-2 align-items-center">
       <img
@@ -36,121 +27,44 @@
   <hr class="my-3" />
   <div class="recipe-short-description">
     <p class="description-paragraph m-0">
-      One thing I learned living in the Canarsie section of Brooklyn, NY was how to cook a good
-      Italian meal. Here is a recipe I created after having this dish in a restaurant. Enjoy!
+      {{ recipe?.shortDescription }}
     </p>
   </div>
   <div class="recipe-img-wrapper my-4 round-1">
     <img
-      src="recipe.jpg"
-      alt=""
+      [src]="recipe?.imgPath ?? 'https://placehold.co/800x600'"
+      [alt]="recipe?.title"
       class="recipe-img" />
   </div>
   <div class="recipe-info d-flex gap-5 align-items-center">
     <div class="recipe-info-item d-flex flex-column gap-1 border-end pe-4">
       <p class="info-title m-0">PREP TIME</p>
-      <p class="info-value m-0">15 MIN</p>
-    </div>
-    <div class="recipe-info-item d-flex flex-column gap-1 border-end pe-4">
-      <p class="info-title m-0">PREP TIME</p>
-      <p class="info-value m-0">15 MIN</p>
+      <p class="info-value m-0">{{ recipe?.preparationTime }} MIN</p>
     </div>
     <div class="recipe-info-item d-flex flex-column gap-1 border-end pe-4">
       <p class="info-title m-0">SERVINGS</p>
-      <p class="info-value m-0">4 PEOPLE</p>
+      <p class="info-value m-0">{{ recipe?.servingCount }} PEOPLE</p>
     </div>
     <div class="recipe-print"><i class="bi bi-printer fs-5"></i></div>
   </div>
   <div class="row recipe-content mt-5">
     <div class="col-12 col-sm-5 recipe-ingredients-col">
       <h5 class="ingredients-title display-6 mb-5">Ingredients</h5>
-      <div class="ingredients-block mb-5">
-        <h6 class="ingredients-list-title fw-bold mb-3">For the crust</h6>
-        <ul class="ingredient-list list-unstyled d-flex flex-column gap-3">
-          <li class="ingredient-list-item d-flex gap-2">
-            <i class="bi bi-circle"></i><span>400g graham crackers</span>
-          </li>
-          <li class="ingredient-list-item d-flex gap-2">
-            <i class="bi bi-circle"></i><span>150g unsalted butters, melted</span>
-          </li>
-        </ul>
-      </div>
-      <div class="ingredients-block mb-5">
-        <h6 class="ingredients-list-title fw-bold mb-3">For the cheescake</h6>
-        <ul
-          class="ingredient-list list-unstyled d-flex flex-column gap-3"
-          [formGroup]="ingredientsFormGroup">
-          @for (ingredient of ingredients; track $index) {
-            <li class="ingredient-list-item d-flex gap-2">
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  [id]="'ingredientCheck_' + $index" />
-                <label
-                  class="form-check-label"
-                  [for]="'ingredientCheck_' + $index">
-                  {{ ingredient }}
-                </label>
-              </div>
-            </li>
-          }
-        </ul>
-      </div>
-      <div class="nutritions-block col-10 px-4 py-5 bg-secondary">
-        <h6 class="display-6 mb-5">Nutrition Facts</h6>
-        <ul class="nutritions-list list-unstyled">
-          <li class="nutrition-list-item py-2 border-bottom d-flex justify-content-between">
-            <span class="nutrition-item">Calories</span><span class="nutrition-value">219.9</span>
-          </li>
-          <li class="nutrition-list-item py-2 border-bottom d-flex justify-content-between">
-            <span class="nutrition-item">Total Fat</span><span class="nutrition-value">10.7 g</span>
-          </li>
-          <li class="nutrition-list-item py-2 border-bottom d-flex justify-content-between">
-            <span class="nutrition-item">Saturated Fat</span
-            ><span class="nutrition-value">2.2 g</span>
-          </li>
-          <li class="nutrition-list-item py-2 border-bottom d-flex justify-content-between">
-            <span class="nutrition-item">Cholesterol</span
-            ><span class="nutrition-value">37.4 mg</span>
-          </li>
-          <li class="nutrition-list-item py-2 border-bottom d-flex justify-content-between">
-            <span class="nutrition-item">Sodium</span><span class="nutrition-value">120.3 mg</span>
-          </li>
-          <li class="nutrition-list-item py-2 border-bottom d-flex justify-content-between">
-            <span class="nutrition-item">Potassium</span
-            ><span class="nutrition-value">32.8 mg</span>
-          </li>
-          <li class="nutrition-list-item py-2 border-bottom d-flex justify-content-between">
-            <span class="nutrition-item">Total Carbohydrate</span
-            ><span class="nutrition-value">22.3 g</span>
-          </li>
-          <li class="nutrition-list-item py-2 border-bottom d-flex justify-content-between">
-            <span class="nutrition-item">Sugars</span><span class="nutrition-value">8.4 g</span>
-          </li>
-          <li class="nutrition-list-item py-2 border-bottom d-flex justify-content-between">
-            <span class="nutrition-item">Protein</span><span class="nutrition-value">7.9 g</span>
-          </li>
-        </ul>
-      </div>
+      @for (ingredientsBlock of recipe?.ingredientsBlock; track $index) {
+        <div class="ingredients-block mb-5">
+          <h6 class="ingredients-list-title fw-bold mb-3">
+            {{ ingredientsBlock.ingredientsBlockTitle }}
+          </h6>
+          <rcp-recipe-ingredients [ingredients]="ingredientsBlock.ingredients" />
+        </div>
+      }
     </div>
-    <div class="col-12 col-sm-7 recipe-instructions">
-      <h6 class="instructions-title display-6 mb-5">Instructions</h6>
-      <div class="instruction-steps-block d-flex flex-column gap-4">
-        @for (step of steps; track $index) {
-          <div class="step-item d-flex gap-2">
-            <span
-              class="step-count rounded-circle flex-shrink-0 d-flex justify-content-center align-items-center text-white bg-primary"
-              >{{ $index + 1 }}</span
-            >
-            <p class="step-description d-inline align-top">
-              To prepare crust add graham crackers to a food processor and process until you reach
-              fine crumbs. Add melted butter and pulse 3-4 times to coat crumbs with butter.
-            </p>
-          </div>
-        }
+    @if (recipe?.steps) {
+      <div class="col-12 col-sm-7 recipe-instructions">
+        <h6 class="instructions-title display-6 mb-5">Instructions</h6>
+        <rcp-recipe-steps [steps]="recipe?.steps ?? []" />
       </div>
-    </div>
+    }
   </div>
   <div class="recipe-feedback"></div>
 </div>

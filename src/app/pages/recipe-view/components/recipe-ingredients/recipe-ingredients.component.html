@@ -1,0 +1,17 @@
+<ul class="ingredient-list list-unstyled d-flex flex-column gap-3">
+  @for (ingredient of ingredients; track $index) {
+    <li class="ingredient-list-item d-flex gap-2">
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          [id]="'ingredientCheck_' + $index" />
+        <label
+          class="form-check-label"
+          [for]="'ingredientCheck_' + $index">
+          {{ ingredient.name }}
+        </label>
+      </div>
+    </li>
+  }
+</ul>
