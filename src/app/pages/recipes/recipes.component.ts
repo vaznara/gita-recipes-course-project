@@ -1,13 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ICategory, IRecipeResponse } from '../../shared/interfaces/interface';
 import { concatMap, of, Subject, takeUntil } from 'rxjs';
 import { CategoryService, RecipeService } from '../../shared/services';
+import { RecipesListingComponent } from '../../shared/components/recipes-listing/recipes-listing.component';
 
 @Component({
   selector: 'rcp-recipes',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RecipesListingComponent],
   templateUrl: './recipes.component.html',
   styleUrl: './recipes.component.scss'
 })

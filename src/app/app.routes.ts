@@ -10,6 +10,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { authGuard } from './shared/guards/auth-guard.guard';
 import { loginGuard } from './shared/guards/login.guard';
 import { UserProfileComponent } from './pages/user-profile/user-profile.component';
+import { RecipesComponent as UserRecipesComponent } from './pages/user/pages/recipes/recipes.component';
 
 export const routes: Routes = [
   { path: '', component: MainComponent },
@@ -23,6 +24,7 @@ export const routes: Routes = [
   {
     path: 'user', canActivateChild: [authGuard], runGuardsAndResolvers: 'always', children: [
       { path: 'profile', component: UserProfileComponent },
+      { path: 'recipes', component: UserRecipesComponent, },
       {
         path: 'recipe', children: [
           { path: 'edit/:key', component: RecipeEditComponent, canActivate: [authGuard] },
