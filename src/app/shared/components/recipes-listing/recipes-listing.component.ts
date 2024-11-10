@@ -17,7 +17,7 @@ export class RecipesListingComponent {
 
   constructor(private router: Router) { }
 
-  onEdit(key: string): void {
-    this.router.navigate([`/user/recipe/edit/${key}`]);
+  onEdit(recipe: IRecipeResponse): void {
+    this.router.navigate([`/user/recipe/edit`], { state: { recipe } });
   }
 }

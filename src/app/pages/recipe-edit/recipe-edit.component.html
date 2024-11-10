@@ -51,44 +51,78 @@
         <label
           for="recipeTitle"
           class="form-label"
+          [ngClass]="{
+            required: getIsRequired('title'),
+          }"
           >Recipe title</label
         >
         <input
           type="text"
           class="form-control"
           formControlName="title"
+          [ngClass]="{
+            'is-valid': title?.touched && title?.valid,
+            'is-invalid': title?.touched && title?.invalid,
+          }"
           id="recipeTitle" />
-        <div
-          id="titleHint"
-          class="form-text">
-          Here you can enter recipe title, recommended short and decriptive title.
+        @if (title?.untouched || title?.valid) {
+          <div
+            id="titleHint"
+            class="form-text">
+            Here you can enter recipe title, recommended short and decriptive title.
+          </div>
+        }
+        <div class="invalid-feedback">
+          @if (title?.hasError('required')) {
+            Title is required
+          } @else if (title?.hasError('minlength')) {
+            Please enter at least 3 characters
+          }
         </div>
       </div>
       <div class="mb-3">
         <label
           for="categorySelect"
           class="form-label"
+          [ngClass]="{
+            required: getIsRequired('categoryKey'),
+          }"
           >Select category</label
         >
         <select
           class="form-select"
           id="categorySelect"
           formControlName="categoryKey"
+          [ngClass]="{
+            'is-valid': categoryKey?.touched && categoryKey?.valid,
+            'is-invalid': categoryKey?.touched && categoryKey?.invalid,
+          }"
           aria-label="category select">
           <option
             selected
-            [value]="null">
+            [value]="''">
             Choose a category
           </option>
           @for (category of categories; track $index) {
             <option [value]="category.key">{{ category.category.name }}</option>
           }
         </select>
+        @if (categoryKey?.untouched || categoryKey?.valid) {
+          <div
+            id="titleHint"
+            class="form-text">
+            Please choose category for this recipe.
+          </div>
+        }
+        <div class="invalid-feedback">Category is required</div>
       </div>
       <div class="mb-3">
         <label
           for="recipeShortDescription"
           class="form-label"
+          [ngClass]="{
+            required: getIsRequired('shortDescription'),
+          }"
           >Recipe short description</label
         >
         <textarea
@@ -96,12 +130,26 @@
           formControlName="shortDescription"
           name="recipeShortDescription"
           placeholder="Enter short description for recipe"
+          [ngClass]="{
+            'is-valid': shortDescription?.touched && shortDescription?.valid,
+            'is-invalid': shortDescription?.touched && shortDescription?.invalid,
+          }"
           id="recipeShortDescription"></textarea>
-        <div
-          id="shortDescriptionHint"
-          class="form-text">
-          Enter short description, minimum of 100 characters. It will be shown under the recipe
-          title.
+        @if (shortDescription?.untouched || shortDescription?.valid) {
+          <div
+            id="shortDescriptionHint"
+            class="form-text">
+            Enter short description, minimum of 50 characters. It will be shown under the recipe
+            title.
+          </div>
+        }
+        <div class="invalid-feedback">
+          @if (shortDescription?.hasError('required')) {
+            Title is required
+          } @else if (shortDescription?.hasError('minlength')) {
+            Please enter at least 50 characters. Current length:
+            {{ shortDescription?.value.length }}
+          }
         </div>
       </div>
       <div class="row mb-3">
@@ -109,12 +157,19 @@
           <label
             for="recipePrepTime"
             class="form-label"
+            [ngClass]="{
+              required: getIsRequired('preparationTime'),
+            }"
             >Preparation Time</label
           >
           <input
             type="number"
             class="form-control"
             formControlName="preparationTime"
+            [ngClass]="{
+              'is-valid': preparationTime?.touched && preparationTime?.valid,
+              'is-invalid': preparationTime?.touched && preparationTime?.invalid,
+            }"
             id="recipePrepTime" />
           <div
             id="prepTimeHint"
@@ -126,12 +181,19 @@
           <label
             for="recipeServings"
             class="form-label"
+            [ngClass]="{
+              required: getIsRequired('servingCount'),
+            }"
             >Servings</label
           >
           <input
             type="number"
             class="form-control"
             formControlName="servingCount"
+            [ngClass]="{
+              'is-valid': servingCount?.touched && servingCount?.valid,
+              'is-invalid': servingCount?.touched && servingCount?.invalid,
+            }"
             id="recipeServings" />
           <div
             id="servingsHint"
@@ -156,7 +218,7 @@
                 <input
                   type="text"
                   class="form-control"
-                  formControlName="ingredientsBlocktitle"
+                  formControlName="ingredientsBlockTitle"
                   aria-label="ingredients-title"
                   [attr.aria-describedby]="'ingredients-addon_' + blockIdx" />
               </div>
