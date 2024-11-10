@@ -1,0 +1,6 @@
+.ingredient-list-item {
+  input[type='checkbox']:checked + label {
+    text-decoration: line-through;
+    color: var(--rcp-gray-500);
+  }
+}

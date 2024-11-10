@@ -1,0 +1,13 @@
+<div class="instruction-steps-block d-flex flex-column gap-4">
+  @for (step of steps; track $index) {
+    <div class="step-item d-flex gap-2">
+      <span
+        class="step-count rounded-circle flex-shrink-0 d-flex justify-content-center align-items-center text-white bg-primary"
+        >{{ $index + 1 }}</span
+      >
+      <p class="step-description d-inline align-top">
+        {{ step }}
+      </p>
+    </div>
+  }
+</div>
