@@ -27,7 +27,7 @@ export const routes: Routes = [
       { path: 'recipes', component: UserRecipesComponent, },
       {
         path: 'recipe', children: [
-          { path: 'edit/:key', component: RecipeEditComponent, canActivate: [authGuard] },
+          { path: 'edit', component: RecipeEditComponent, canActivate: [authGuard] },
           { path: 'new', component: RecipeEditComponent, canActivate: [authGuard] },
         ]
       }

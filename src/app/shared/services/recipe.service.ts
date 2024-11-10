@@ -64,8 +64,8 @@ export class RecipeService {
     return this.http.delete<void>(`${this.path}/${recipeKey}${this.pathSuffix}`);
   }
 
-  editRecipe(recipeKey: string, recipe: IRecipe): Observable<void> {
-    return this.http.patch<void>(`${this.path}/${recipeKey}${this.pathSuffix}`, recipe);
+  updateRecipe(recipe: IResponseModel<IRecipe>): Observable<void> {
+    return this.http.patch<void>(`${this.path + this.pathSuffix}`, recipe);
   }
 
   createQuery(field: string, value: string): HttpParams {

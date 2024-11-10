@@ -6,9 +6,9 @@ import { StorageService } from '../../shared/services/storage.service';
 import { RcpError } from '../../shared/services/api-error-handler.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ErrorDialogComponent } from '../../shared/components/error-dialog/error-dialog.component';
-import { ICategoryResponse } from '../../shared/interfaces/interface';
+import { ICategoryResponse, IIngredient, IRecipeResponse } from '../../shared/interfaces/interface';
 import { NgClass } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'rcp-recipe-edit',
@@ -23,30 +23,19 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   ngUnsubscribe$: Subject<void> = new Subject();
 
   recipeForm: FormGroup = new FormGroup({
-    title: new FormControl('', [Validators.required]),
+    title: new FormControl('', [Validators.required, Validators.minLength(3)]),
     imgPath: new FormControl('', [Validators.required]),
-    shortDescription: new FormControl('', [Validators.required, Validators.minLength(100)]),
+    shortDescription: new FormControl('', [Validators.required, Validators.minLength(50)]),
     preparationTime: new FormControl(1, [Validators.required, Validators.min(1)]),
     servingCount: new FormControl(1, [Validators.required, Validators.min(1)]),
     categoryKey: new FormControl('', [Validators.required]),
-    ingredientsBlock: new FormArray([
-      new FormGroup({
-        ingredientsBlocktitle: new FormControl(''),
-        ingredients: new FormArray([
-          new FormGroup({
-            name: new FormControl('', [Validators.required]),
-            unit: new FormControl('', [Validators.required]),
-            quantity: new FormControl(0.1, [Validators.required, Validators.min(0.1)])
-          })
-        ])
-      })
-    ]),
-    instructions: new FormArray([]),
+    ingredientsBlock: new FormArray([]),
     steps: new FormArray([
-      new FormControl('', [Validators.required])
+      new FormControl('', [Validators.required, Validators.minLength(11)])
     ])
   });
 
+  recipeKey?: string;
   categories: ICategoryResponse[] = [];
   imageFile: File | null = null;
 
@@ -57,6 +46,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     private categoryService: CategoryService,
     private cdr: ChangeDetectorRef,
     private dialog: MatDialog,
+    private route: ActivatedRoute,
     private router: Router
   ) { }
 
@@ -66,6 +56,32 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
         this.categories = res;
         this.cdr.markForCheck();
       })
+
+    const recipe = history.state.recipe;
+
+    if (recipe) {
+      this.patchValue(recipe);
+    } else {
+      this.ingredientBlocks.push(this.ingredientsBlockFormGroup);
+      this.addIngredient(0);
+    }
+  }
+
+  patchValue(recipe: IRecipeResponse): void {
+    recipe.recipe.ingredientsBlock.forEach((block, idx) => {
+      this.ingredientBlocks.push(this.ingredientsBlockFormGroup);
+      this.ingredientBlocks.at(idx).get('ingredientsBlockTitle')?.patchValue(block.ingredientsBlockTitle)
+      while (this.getBlockIngredients(idx).length < block.ingredients.length) {
+        this.getBlockIngredients(idx).push(this.getIngredientFormGroup())
+      }
+    })
+
+    this.recipeKey = recipe.key;
+    this.recipeForm.patchValue(recipe.recipe);
+  }
+
+  getIsRequired(controlName: string): boolean {
+    return !!this.recipeForm.get(controlName)?.hasValidator(Validators.required)
   }
 
   get ingredientBlocks(): FormArray {
@@ -80,30 +96,50 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     return this.recipeForm.get('imgPath');
   }
 
+  get title(): AbstractControl | null {
+    return this.recipeForm.get('title');
+  }
+
+  get categoryKey(): AbstractControl | null {
+    return this.recipeForm.get('categoryKey');
+  }
+
+  get shortDescription(): AbstractControl | null {
+    return this.recipeForm.get('shortDescription');
+  }
+
+  get preparationTime(): AbstractControl | null {
+    return this.recipeForm.get('preparationTime');
+  }
+
+  get servingCount(): AbstractControl | null {
+    return this.recipeForm.get('servingCount');
+  }
+
   getBlockIngredients(idx: number): FormArray {
     return this.ingredientBlocks.at(idx).get('ingredients') as FormArray;
   }
 
   addIngredientBlock(): void {
-    this.ingredientBlocks.push(this.createIngredientsBlockFormGroup());
+    this.ingredientBlocks.push(this.ingredientsBlockFormGroup);
   }
 
-  createIngredientsBlockFormGroup(): FormGroup {
+  get ingredientsBlockFormGroup(): FormGroup {
     return new FormGroup({
-      ingredientsBlocktitle: new FormControl(''),
-      ingredients: new FormArray([new FormControl('')])
+      ingredientsBlockTitle: new FormControl('', [Validators.required]),
+      ingredients: new FormArray([])
     })
   }
 
   addIngredient(idx: number): void {
-    this.getBlockIngredients(idx).push(this.ingredientFormGroup);
+    this.getBlockIngredients(idx).push(this.getIngredientFormGroup());
   }
 
-  get ingredientFormGroup(): FormGroup {
+  getIngredientFormGroup(ingredient?: IIngredient): FormGroup {
     return new FormGroup({
-      name: new FormControl('', [Validators.required]),
-      unit: new FormControl('', [Validators.required]),
-      quantity: new FormControl(0.1, [Validators.required, Validators.min(0.1)])
+      name: new FormControl(ingredient?.name ?? '', [Validators.required, Validators.minLength(4)]),
+      unit: new FormControl(ingredient?.unit ?? '', [Validators.required]),
+      quantity: new FormControl(ingredient?.quantity ?? 0.1, [Validators.required, Validators.min(0.1)])
     })
   }
 
@@ -168,10 +204,13 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
         combineLatestWith(this.storageService.uploadImage(this.imageFile)),
         concatMap(([user, imagePath]) => {
           this.imagePath?.setValue(imagePath, { emitValue: false });
-          return this.recipeService.createRecipe({ ...this.recipeForm.value, author: user?.uid })
+          const recipe = { ...this.recipeForm.value, author: user?.uid };
+          return this.recipeKey
+            ? this.recipeService.updateRecipe({ [this.recipeKey]: recipe })
+            : this.recipeService.createRecipe(recipe)
         })
       ).subscribe(res => {
-        this.router.navigate([`/recipe/${res.name}`]);
+        this.router.navigate([`/recipe/${this.recipeKey ?? res?.name}`]);
       })
     }
   }

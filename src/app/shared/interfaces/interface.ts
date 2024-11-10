@@ -19,8 +19,8 @@ export interface IRecipe {
   shortDescription: string;
   servingCount: number;
   preparationTime: number;
-  ingredientsBlock?: IIngredientsBlock[];
-  steps?: string[];
+  ingredientsBlock: IIngredientsBlock[];
+  steps: string[];
 }
 
 export interface IRecipeResponse {

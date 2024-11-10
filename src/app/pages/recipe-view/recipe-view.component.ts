@@ -44,7 +44,7 @@ export class RecipeViewComponent implements OnInit, OnDestroy {
   }
 
   onEdit(): void {
-    this.router.navigate([`/user/recipe/edit/${this.recipeKey}`]);
+    this.router.navigate([`/user/recipe/edit`], { state: { recipe: { key: this.recipeKey, recipe: this.recipe } } });
   }
 
   ngOnDestroy(): void {
