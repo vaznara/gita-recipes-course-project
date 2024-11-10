@@ -1,17 +1,19 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService, CategoryService, RecipeService } from '../../shared/services';
-import { concatMap, Subject, take } from 'rxjs';
+import { combineLatestWith, concatMap, Subject, take, takeUntil } from 'rxjs';
 import { StorageService } from '../../shared/services/storage.service';
 import { RcpError } from '../../shared/services/api-error-handler.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ErrorDialogComponent } from '../../shared/components/error-dialog/error-dialog.component';
 import { ICategoryResponse } from '../../shared/interfaces/interface';
+import { NgClass } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'rcp-recipe-edit',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, NgClass],
   templateUrl: './recipe-edit.component.html',
   styleUrl: './recipe-edit.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -46,8 +48,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   });
 
   categories: ICategoryResponse[] = [];
-
-  imageSource: string = 'https://placehold.co/1200x200';
+  imageFile: File | null = null;
 
   constructor(
     private recipeService: RecipeService,
@@ -55,13 +56,15 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     private storageService: StorageService,
     private categoryService: CategoryService,
     private cdr: ChangeDetectorRef,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
     this.categoryService.getCategories().pipe(take(1))
       .subscribe(res => {
         this.categories = res;
+        this.cdr.markForCheck();
       })
   }
 
@@ -116,6 +119,20 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     this.steps.push(new FormControl('', [Validators.required]));
   }
 
+  handleImage(event: Event): void {
+    const target = (event.target as HTMLInputElement);
+    if (target.files && target.files[0]) {
+      const reader = new FileReader();
+      this.imageFile = target.files[0];
+      reader.onload = (event: ProgressEvent): void => {
+        this.imagePath?.setValue((<FileReader>event.target).result);
+        this.cdr.detectChanges();
+      }
+
+      reader.readAsDataURL(target.files[0]);
+    }
+  }
+
   uploadImage(event: Event): void {
     const files = (event.target as HTMLInputElement).files;
     if (!files) {
@@ -134,7 +151,6 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
 
     this.storageService.uploadImage(files[0]).pipe(take(1))
       .subscribe(res => {
-        this.imageSource = res;
         this.recipeForm.get('imgPath')?.setValue(res);
         this.cdr.detectChanges();
       })
@@ -146,11 +162,18 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(): void {
-    this.authService.currentUser$.pipe(
-      concatMap(user => {
-        return this.recipeService.createRecipe({ ...this.recipeForm.value, author: user?.uid })
+    if (this.imageFile) {
+      this.authService.currentUser$.pipe(
+        takeUntil(this.ngUnsubscribe$),
+        combineLatestWith(this.storageService.uploadImage(this.imageFile)),
+        concatMap(([user, imagePath]) => {
+          this.imagePath?.setValue(imagePath, { emitValue: false });
+          return this.recipeService.createRecipe({ ...this.recipeForm.value, author: user?.uid })
+        })
+      ).subscribe(res => {
+        this.router.navigate([`/recipe/${res.name}`]);
       })
-    ).subscribe()
+    }
   }
 
   ngOnDestroy(): void {

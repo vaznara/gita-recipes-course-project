@@ -24,7 +24,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userMenu: IMenuItem[] = [
     { code: 'profile', path: 'user/profile', title: 'My Profile' },
     { code: 'recipes', path: 'user/recipes', title: 'My Recipes' },
-    { code: 'createRecipe', path: 'user/recipes/new', title: 'Create recipe' },
+    { code: 'createRecipe', path: 'user/recipe/new', title: 'Create recipe' },
   ];
 
   private dialogRef?: MatDialogRef<LoginModalComponent>;
