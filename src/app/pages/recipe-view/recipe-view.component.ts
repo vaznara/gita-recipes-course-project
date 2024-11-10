@@ -7,6 +7,7 @@ import { RecipeHeaderComponent } from './components/recipe-header/recipe-header.
 import { RecipeIngredientsComponent } from './components/recipe-ingredients/recipe-ingredients.component';
 import { RecipeStepsComponent } from './components/recipe-steps/recipe-steps.component';
 import { UserAccessDirective } from '../../shared/directives/user-access.directive';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'rcp-recipe-view',
@@ -25,6 +26,7 @@ export class RecipeViewComponent implements OnInit, OnDestroy {
   constructor(
     private recipeService: RecipeService,
     private router: Router,
+    private title: Title,
     private route: ActivatedRoute
   ) { }
 
@@ -33,6 +35,7 @@ export class RecipeViewComponent implements OnInit, OnDestroy {
     if (recipe) {
       this.recipeKey = recipe.key;
       this.recipe = recipe.recipe;
+      this.title.setTitle(`Recipe: ${this.recipe.title}`);
     } else {
       this.route.paramMap.pipe(
         takeUntil(this.ngUnsubscribe$),
@@ -42,9 +45,12 @@ export class RecipeViewComponent implements OnInit, OnDestroy {
             this.router.navigate(['/recipes']);
             return EMPTY;
           }
-          return this.recipeService.getRecipe(this.recipeKey)
+          return this.recipeService.getRecipe(this.recipeKey);
         })
-      ).subscribe(res => this.recipe = res)
+      ).subscribe(res => {
+        this.recipe = res;
+        this.title.setTitle(`Recipe: ${this.recipe.title}`);
+      })
     }
   }
 

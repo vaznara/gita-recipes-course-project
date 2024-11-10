@@ -4,6 +4,7 @@ import { ICategory, IRecipeResponse } from '../../shared/interfaces/interface';
 import { concatMap, of, Subject, takeUntil } from 'rxjs';
 import { CategoryService, RecipeService } from '../../shared/services';
 import { RecipesListingComponent } from '../../shared/components/recipes-listing/recipes-listing.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'rcp-recipes',
@@ -22,6 +23,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
 
   constructor(private route: ActivatedRoute,
     private recipeService: RecipeService,
+    private title: Title,
     private categoryService: CategoryService) {
 
   }
@@ -36,6 +38,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
       }),
       concatMap((category) => {
         this.category = category;
+        this.title.setTitle(`Recipes from ${this.category?.name} category`);
         return this.categoryKey ? this.recipeService.getRecipesByCategory(this.categoryKey) : this.recipeService.getRecipes();
       })
     )

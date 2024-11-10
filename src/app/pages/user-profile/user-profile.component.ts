@@ -8,6 +8,7 @@ import { DialogComponent } from '../../shared/components/dialog/dialog.component
 import { IDialogData } from '../../shared/interfaces/interface';
 import { ApiErrorHandlerService } from '../../shared/services/api-error-handler.service';
 import { NgClass } from '@angular/common';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'rcp-user-profile',
@@ -35,7 +36,12 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
   isUpdated: boolean = false;
 
-  constructor(private authService: AuthService, private dialog: MatDialog, private errorHandler: ApiErrorHandlerService) { }
+  constructor(
+    private authService: AuthService,
+    private dialog: MatDialog,
+    private title: Title,
+    private errorHandler: ApiErrorHandlerService
+  ) { }
 
 
   ngOnInit(): void {
@@ -44,6 +50,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         this.user = res;
         if (res?.displayName) this.fullName?.setValue(res.displayName);
         if (res?.email) this.email?.setValue(res.email);
+        this.title.setTitle(`${this.user?.displayName}'s profile`)
       });
   }
 
