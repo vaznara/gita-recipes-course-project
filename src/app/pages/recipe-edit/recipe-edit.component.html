@@ -43,6 +43,21 @@
         </div>
       </div>
       <div class="mb-3">
+        <select
+          class="form-select"
+          formControlName="categoryKey"
+          aria-label="category select">
+          <option
+            selected
+            [value]="null">
+            Choose a category
+          </option>
+          @for (category of categories; track $index) {
+            <option [value]="category.key">{{ category.category.name }}</option>
+          }
+        </select>
+      </div>
+      <div class="mb-3">
         <label
           for="recipeShortDescription"
           class="form-label"

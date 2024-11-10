@@ -1,11 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService, RecipeService } from '../../shared/services';
-import { concatMap, take } from 'rxjs';
+import { AuthService, CategoryService, RecipeService } from '../../shared/services';
+import { concatMap, Subject, take } from 'rxjs';
 import { StorageService } from '../../shared/services/storage.service';
 import { RcpError } from '../../shared/services/api-error-handler.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ErrorDialogComponent } from '../../shared/components/error-dialog/error-dialog.component';
+import { ICategoryResponse } from '../../shared/interfaces/interface';
 
 @Component({
   selector: 'rcp-recipe-edit',
@@ -15,7 +16,9 @@ import { ErrorDialogComponent } from '../../shared/components/error-dialog/error
   styleUrl: './recipe-edit.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RecipeEditComponent {
+export class RecipeEditComponent implements OnInit, OnDestroy {
+
+  ngUnsubscribe$: Subject<void> = new Subject();
 
   recipeForm: FormGroup = new FormGroup({
     title: new FormControl('', [Validators.required]),
@@ -23,6 +26,7 @@ export class RecipeEditComponent {
     shortDescription: new FormControl('', [Validators.required, Validators.minLength(100)]),
     preparationTime: new FormControl(1, [Validators.required, Validators.min(1)]),
     servingCount: new FormControl(1, [Validators.required, Validators.min(1)]),
+    categoryKey: new FormControl('', [Validators.required]),
     ingredientsBlock: new FormArray([
       new FormGroup({
         ingredientsBlocktitle: new FormControl(''),
@@ -39,7 +43,9 @@ export class RecipeEditComponent {
     steps: new FormArray([
       new FormControl('', [Validators.required])
     ])
-  })
+  });
+
+  categories: ICategoryResponse[] = [];
 
   imageSource: string = 'https://placehold.co/1200x200';
 
@@ -47,9 +53,17 @@ export class RecipeEditComponent {
     private recipeService: RecipeService,
     private authService: AuthService,
     private storageService: StorageService,
+    private categoryService: CategoryService,
     private cdr: ChangeDetectorRef,
     private dialog: MatDialog
   ) { }
+
+  ngOnInit(): void {
+    this.categoryService.getCategories().pipe(take(1))
+      .subscribe(res => {
+        this.categories = res;
+      })
+  }
 
   get ingredientBlocks(): FormArray {
     return this.recipeForm.get('ingredientsBlock') as FormArray;
@@ -137,5 +151,10 @@ export class RecipeEditComponent {
         return this.recipeService.createRecipe({ ...this.recipeForm.value, author: user?.uid })
       })
     ).subscribe()
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe$.next();
+    this.ngUnsubscribe$.complete();
   }
 }

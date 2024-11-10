@@ -7,7 +7,8 @@ export interface IResponseModel<T> {
 export interface ICategory {
   name: string;
   description: string;
-  img: string;
+  imgPath: string;
+  author: string;
 }
 
 export interface IRecipe {

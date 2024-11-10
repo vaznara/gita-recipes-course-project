@@ -3,14 +3,15 @@
   @for (item of categories; track item.key) {
     <a
       href
-      [routerLink]="['/category/' + item.key]"
+      [routerLink]="['/recipes/category/' + item.key]"
       routerLinkActive="router-link-active"
-      class="col-6 col-sm-3 text-decoration-none">
-      <div class="cat-wrapper d-flex flex-column mb-4 gap-2">
-        <img
-          [src]="item.category.img"
-          [alt]="'Category_' + item.key"
-          class="cat-img rounded-circle" />
+      class="col-6 col-sm-3 text-decoration-none position-relative">
+      <div class="category-wrapper position-relative d-flex flex-column mb-4 gap-2">
+        <div class="category-image-wrapper">
+          <span
+            class="category-background d-block rounded-circle"
+            [ngStyle]="{ 'background-image': 'url(' + item.category.imgPath + ')' }"></span>
+        </div>
         <h6 class="cat-title text-center">{{ item.category.name }}</h6>
       </div>
     </a>

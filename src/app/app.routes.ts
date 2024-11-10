@@ -33,11 +33,11 @@ export const routes: Routes = [
     ]
   },
   {
-    path: 'recipes', component: RecipesComponent, children: [
-      { path: 'recipes/category/:key', component: RecipesComponent },
+    path: 'recipes', children: [
+      { path: 'category/:key', component: RecipesComponent },
+      { path: '', component: RecipesComponent },
     ]
   },
-  { path: 'category/:key', component: RecipesComponent },
   { path: 'categories', component: CategoriesComponent },
   { path: '**', component: NotFoundComponent }
 ];
