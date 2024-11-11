@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { IRecipe, IResponseModel } from '../interfaces/interface';
 import { map, Observable } from 'rxjs';
-import { ENV_VARIABLES } from '../../../environments/environment.dev';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ export class RecipeService {
 
   recipesDummyData: IRecipe[] = []
 
-  private readonly path = `${ENV_VARIABLES.dbPath}/recipes`
+  private readonly path = `${environment.dbPath}/recipes`
   private readonly pathSuffix = `.json`
 
   constructor(private http: HttpClient) { }
