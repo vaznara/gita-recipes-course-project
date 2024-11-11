@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { ICategory, ICategoryResponse, IResponseModel } from '../interfaces/interface';
 import { map, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { ENV_VARIABLES } from '../../../environments/environment';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
 
-  private readonly path = `${ENV_VARIABLES.dbPath}/categories`;
+  private readonly path = `${environment.dbPath}/categories`;
   private readonly pathSuffix = '.json'
 
   constructor(private http: HttpClient) { }
