@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { deleteObject, getDownloadURL, getStorage, ref, uploadBytes } from '@angular/fire/storage';
 import { catchError, concatMap, from, Observable, tap } from 'rxjs';
-import { ENV_VARIABLES } from '../../../environments/environment.dev';
 import { ApiErrorHandlerService } from './api-error-handler.service';
 import { LoaderService } from './loader.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +14,8 @@ export class StorageService {
 
   uploadImage(file: File): Observable<string> {
 
-    if (file.size > ENV_VARIABLES.maxFileSize) {
-      return this.errorHandler.handleError({ name: 'File too big', message: `Maximum image size is ${ENV_VARIABLES.maxFileSize / 1024}KB` });
+    if (file.size > +environment.maxFileSize) {
+      return this.errorHandler.handleError({ name: 'File too big', message: `Maximum image size is ${+environment.maxFileSize / 1024}KB` });
     }
 
     this.loaderService.isLoading$.next(true);
