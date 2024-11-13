@@ -212,7 +212,11 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
             : this.recipeService.createRecipe(recipe)
         })
       ).subscribe(res => {
-        this.router.navigate([`/recipe/${this.recipeKey ?? res?.name}`]);
+        this.router.navigate([`/recipe/view`], {
+          state: {
+            recipe: { key: this.recipeKey ?? res?.name, recipe: this.recipeForm.value }
+          }
+        })
       })
     }
   }
