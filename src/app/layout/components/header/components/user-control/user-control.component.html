@@ -1,39 +1,41 @@
-<div class="btn-group">
-  <button
-    type="button"
-    class="btn dropdown-toggle d-flex gap-2 align-items-center"
-    data-bs-toggle="dropdown"
-    aria-expanded="false">
-    {{ userDisplayName }}
-    @if (userPhotoPath) {
-      <img
-        [src]="userPhotoPath"
-        [alt]="userDisplayName"
-        class="user-photo" />
-    } @else {
-      <i class="bi bi-person-circle fs-2"></i>
-    }
-  </button>
-  <ul class="dropdown-menu dropdown-menu-end">
-    @for (item of userMenu; track $index) {
+@if (user) {
+  <div class="btn-group">
+    <button
+      type="button"
+      class="btn dropdown-toggle d-flex gap-2 align-items-center"
+      data-bs-toggle="dropdown"
+      aria-expanded="false">
+      {{ user.displayName }}
+      @if (user.photoURL) {
+        <img
+          [src]="user.photoURL"
+          [alt]="user.displayName"
+          class="user-photo" />
+      } @else {
+        <i class="bi bi-person-circle fs-2"></i>
+      }
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end">
+      @for (item of userMenu; track $index) {
+        <li>
+          <a
+            [routerLink]="[item.path]"
+            routerLinkActive="active"
+            class="dropdown-item"
+            href="#"
+            >{{ item.title }}</a
+          >
+        </li>
+      }
+      <li><hr class="dropdown-divider" /></li>
       <li>
         <a
-          [routerLink]="[item.path]"
-          routerLinkActive="active"
+          href
+          (click)="onLogout()"
           class="dropdown-item"
-          href="#"
-          >{{ item.title }}</a
+          >Logout</a
         >
       </li>
-    }
-    <li><hr class="dropdown-divider" /></li>
-    <li>
-      <a
-        href
-        (click)="onLogout()"
-        class="dropdown-item"
-        >Logout</a
-      >
-    </li>
-  </ul>
-</div>
+    </ul>
+  </div>
+}

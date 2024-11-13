@@ -22,38 +22,43 @@
   <div class="offcanvas-body">
     <div class="navbar-nav justify-content-end flex-grow-1 pe-3">
       <div class="d-xl-none">
-        <div class="user-block d-flex gap-2 align-items-center mb-2">
-          @if (userPhotoPath) {
-            <img
-              [src]="userPhotoPath"
-              [alt]="userDisplayName"
-              class="user-photo" />
-          } @else {
-            <i class="bi bi-person-circle fs-2"></i>
-          }
-          <span>{{ 'Vasily Titov' }}</span>
-        </div>
-        <hr />
-        @if (userMenu && userMenu.length) {
-          @for (item of userMenu; track $index) {
-            <a
-              class="nav-link"
-              [routerLink]="[item.path]"
-              routerLinkActive="active"
-              href
-              >{{ item.title }}</a
-            >
-          }
-          <a
-            (click)="onLogout()"
-            class="nav-link"
-            href
-            >Logout</a
-          >
+        @if (user) {
+          <div class="user-block d-flex gap-2 align-items-center mb-2">
+            @if (user.photoURL) {
+              <img
+                [src]="user.photoURL"
+                [alt]="user.displayName"
+                class="user-photo" />
+            } @else {
+              <i class="bi bi-person-circle fs-2"></i>
+            }
+            <span>{{ user.displayName }}</span>
+          </div>
           <hr />
+          @if (userMenu && userMenu.length) {
+            @for (item of userMenu; track $index) {
+              <a
+                data-bs-dismiss="offcanvas"
+                class="nav-link"
+                [routerLink]="[item.path]"
+                routerLinkActive="active"
+                href
+                >{{ item.title }}</a
+              >
+            }
+            <a
+              data-bs-dismiss="offcanvas"
+              (click)="onLogout()"
+              class="nav-link"
+              href
+              >Logout</a
+            >
+            <hr />
+          }
         }
       </div>
       <a
+        data-bs-dismiss="offcanvas"
         class="nav-link active"
         aria-current="page"
         [routerLink]="['/']"
@@ -61,6 +66,7 @@
         >Homepage</a
       >
       <a
+        data-bs-dismiss="offcanvas"
         class="nav-link"
         [routerLink]="['/recipes']"
         routerLinkActive="active"
@@ -68,6 +74,7 @@
         >Recipes</a
       >
       <a
+        data-bs-dismiss="offcanvas"
         class="nav-link"
         [routerLink]="['/categories']"
         routerLinkActive="active"
@@ -75,6 +82,7 @@
         >Categories</a
       >
       <a
+        data-bs-dismiss="offcanvas"
         class="nav-link"
         href="#"
         >Blog</a
