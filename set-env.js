@@ -1,11 +1,19 @@
-const fs = require('fs');
-const path = require('path');
+const setEnv = () => {
+  const fs = require('fs');
+  const writeFile = fs.writeFile;
 
-// Define the path to the environment file
-const targetPath = path.join(__dirname, 'src/environments/environment.prod.ts');
+  const path = 'src/environments';
 
-// Define the environment variables and fallback values if not defined
-const envConfigFile = `
+  if (!fs.existsSync(path)) {
+    fs.mkdirSync(path);
+    console.log('Environments Folder created');
+  }
+
+  const targetPath = 'src/environments/environment.ts';
+
+  require('dotenv').config();
+  // `environment.ts` file structure
+  const envConfigFile = `
 export const environment = {
   production: true,
   firebase: {
@@ -21,11 +29,14 @@ export const environment = {
 };
 `;
 
-// Write the content to the environment file
-fs.writeFile(targetPath, envConfigFile, (err) => {
-  if (err) {
-    console.error('Error writing environment file', err);
-  } else {
-    console.log(`Environment file generated at ${targetPath}`);
-  }
-});
+  writeFile(targetPath, envConfigFile, (err) => {
+    if (err) {
+      console.error(err);
+      throw err;
+    } else {
+      console.log(`Angular environment.ts file generated correctly at ${targetPath} \n`);
+    }
+  });
+};
+
+setEnv();
