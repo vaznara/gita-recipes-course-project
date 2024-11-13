@@ -1,0 +1,17 @@
+@if (category) {
+  <a
+    href
+    [routerLink]="['/recipes']"
+    [queryParams]="{ key: category.key }"
+    routerLinkActive="router-link-active"
+    class="col-6 col-sm-3 text-decoration-none position-relative">
+    <div class="category-wrapper position-relative d-flex flex-column mb-4 gap-2">
+      <div class="category-image-wrapper">
+        <span
+          class="category-background d-block rounded-circle"
+          [ngStyle]="{ 'background-image': 'url(' + category.category.imgPath + ')' }"></span>
+      </div>
+      <h6 class="cat-title text-center">{{ category.category.name }}</h6>
+    </div>
+  </a>
+}

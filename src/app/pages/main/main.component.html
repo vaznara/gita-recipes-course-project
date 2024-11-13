@@ -1,5 +1,5 @@
 <div class="main-slider mb-5">
-  <rcp-slider />
+  <rcp-slider (viewRecipe)="onSlideClick($event)" [recipes]="carouselRecipes" />
 </div>
 <div class="featured-recipes mb-3">
   <rcp-featured
@@ -7,5 +7,5 @@
     [recipes]="featuredRecipes" />
 </div>
 <div class="popular-categories">
-  <rcp-popular-categories />
+  <rcp-popular-categories [categories]="popularCategories" />
 </div>

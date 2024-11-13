@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { RecipeService } from '../../../../shared/services/recipe.service';
-import { IRecipe } from '../../../../shared/interfaces/interface';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { IRecipeResponse } from '../../../../shared/interfaces/interface';
 import { SlideComponent } from './components/slide/slide.component';
 import { NgClass } from '@angular/common';
 
@@ -11,15 +10,13 @@ import { NgClass } from '@angular/common';
   templateUrl: './slider.component.html',
   styleUrl: './slider.component.scss'
 })
-export class SliderComponent implements OnInit {
+export class SliderComponent {
 
-  constructor(private recipeServer: RecipeService) {
+  @Input() recipes?: IRecipeResponse[];
 
-  }
+  @Output() viewRecipe: EventEmitter<IRecipeResponse> = new EventEmitter();
 
-  recipes?: IRecipe[];
-
-  ngOnInit(): void {
-    // this.recipeServer.getRecipesByCategory("1").subscribe(res => this.recipes = res)
+  onView(recipe: IRecipeResponse): void {
+    this.viewRecipe.emit(recipe);
   }
 }

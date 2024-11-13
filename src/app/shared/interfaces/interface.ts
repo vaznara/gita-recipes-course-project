@@ -13,6 +13,8 @@ export interface ICategory {
 
 export interface IRecipe {
   author: string;
+  isInMainCarousel: boolean;
+  isFeatured: boolean;
   title: string;
   imgPath: string;
   categoryKey: string;

@@ -206,7 +206,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
         combineLatestWith(this.storageService.uploadImage(this.imageFile)),
         concatMap(([user, imagePath]) => {
           this.imagePath?.setValue(imagePath, { emitValue: false });
-          const recipe = { ...this.recipeForm.value, author: user?.uid };
+          const recipe = { ...this.recipeForm.value, author: user?.uid, isFeatured: false, isInMainCarousel: false };
           return this.recipeKey
             ? this.recipeService.updateRecipe({ [this.recipeKey]: recipe })
             : this.recipeService.createRecipe(recipe)

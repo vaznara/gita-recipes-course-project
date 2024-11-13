@@ -1,26 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import { CategoryService } from '../../../../shared/services';
-import { ICategory } from '../../../../shared/interfaces/interface';
-import { RouterLink } from '@angular/router';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ICategoryResponse } from '../../../../shared/interfaces/interface';
+import { CategoryCardComponent } from '../../../../shared/components/category-card/category-card.component';
 
 @Component({
   selector: 'rcp-popular-categories',
   standalone: true,
-  imports: [RouterLink],
+  imports: [CategoryCardComponent],
   templateUrl: './popular-categories.component.html',
-  styleUrl: './popular-categories.component.scss'
+  styleUrl: './popular-categories.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PopularCategoriesComponent implements OnInit {
 
   private readonly MAX_LENGTH = 6;
 
-  categories: ICategory[] = [];
-
-  constructor(private categoryService: CategoryService) { }
+  @Input() categories: ICategoryResponse[] = [];
 
   ngOnInit(): void {
-    this.categoryService.getCategories().subscribe(res => {
-      // this.categories = res.slice(0, this.MAX_LENGTH)
-    })
+    if (this.categories.length > this.MAX_LENGTH) {
+      this.categories = this.categories.slice(0, this.MAX_LENGTH);
+    }
   }
 }

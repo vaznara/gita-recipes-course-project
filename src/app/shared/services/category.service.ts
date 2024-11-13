@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ICategory, ICategoryResponse, IResponseModel } from '../interfaces/interface';
 import { map, Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -25,6 +25,19 @@ export class CategoryService {
     );
   }
 
+  getPopularCategories(): Observable<ICategoryResponse[]> {
+    return this.http.get<IResponseModel<ICategory>>(`${this.path}${this.pathSuffix}`,
+      { params: this.createQuery('isPopular', true) }
+    ).pipe(
+      map((data) =>
+        Object.keys(data).map(key => ({
+          key,
+          category: data[key]
+        }))
+      )
+    );
+  }
+
   getCategory(categoryKey: string): Observable<ICategory> {
     return this.http.get<ICategory>(`${this.path}/${categoryKey}${this.pathSuffix}`)
   }
@@ -39,5 +52,10 @@ export class CategoryService {
 
   deleteCategory(categoryKey: string): Observable<void> {
     return this.http.delete<void>(`${this.path}/${categoryKey}${this.pathSuffix}`);
+  }
+
+  createQuery(field: string, value: string | boolean): HttpParams {
+    const params = { 'orderBy': `"${field}"`, 'equalTo': typeof value === 'string' ? `"${value}"` : `${value}` };
+    return new HttpParams({ fromObject: params });
   }
 }
