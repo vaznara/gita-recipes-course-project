@@ -6,7 +6,9 @@
       href="#"
       >Recipes</a
     >
-    <rcp-main-menu [userMenu]="userMenu" />
+    <rcp-main-menu
+      [userMenu]="userMenu"
+      [user]="user" />
     <div class="user d-flex gap-2 align-items-center">
       <rcp-search />
       @if (user) {
@@ -14,8 +16,7 @@
           class="d-none d-xl-block"
           (logout)="onLogout()"
           [userMenu]="userMenu"
-          [userDisplayName]="user.displayName"
-          [userPhotoPath]="user.photoURL" />
+          [user]="user" />
       } @else {
         <button
           (click)="onLogin()"

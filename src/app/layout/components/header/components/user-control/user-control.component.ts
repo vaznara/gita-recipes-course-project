@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { IMenuItem } from '../../../../../shared/interfaces/interface';
+import { User } from '@angular/fire/auth';
 
 @Component({
   selector: 'rcp-user-control',
@@ -12,8 +13,7 @@ import { IMenuItem } from '../../../../../shared/interfaces/interface';
 })
 export class UserControlComponent {
 
-  @Input() userDisplayName!: string | null;
-  @Input() userPhotoPath!: string | null;
+  @Input() user: User | null = null;
   @Input() userMenu?: IMenuItem[];
 
   @Output() logout: EventEmitter<void> = new EventEmitter();

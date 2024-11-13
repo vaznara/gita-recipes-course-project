@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { IMenuItem } from '../../../../../shared/interfaces/interface';
+import { User } from '@angular/fire/auth';
 
 @Component({
   selector: 'rcp-main-menu',
@@ -12,9 +13,9 @@ import { IMenuItem } from '../../../../../shared/interfaces/interface';
 })
 export class MainMenuComponent {
 
+  @Input() user: User | null = null;
   @Input() userMenu?: IMenuItem[];
-  @Input() userDisplayName?: string;
-  @Input() userPhotoPath?: string;
+
   @Output() logout: EventEmitter<void> = new EventEmitter();
 
   onLogout(): void {
