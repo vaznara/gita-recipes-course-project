@@ -1,14 +1,20 @@
-import { Component, Input } from '@angular/core';
-import { IRecipe } from '../../../../../../shared/interfaces/interface';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { IRecipeResponse } from '../../../../../../shared/interfaces/interface';
+import { NgStyle } from '@angular/common';
 
 @Component({
   selector: 'rcp-slide',
   standalone: true,
-  imports: [],
+  imports: [NgStyle],
   templateUrl: './slide.component.html',
   styleUrl: './slide.component.scss'
 })
 export class SlideComponent {
 
-  @Input() slide!: IRecipe;
+  @Input() slide!: IRecipeResponse;
+  @Output() viewRecipe: EventEmitter<void> = new EventEmitter();
+
+  onClick(): void {
+    this.viewRecipe.emit();
+  }
 }

@@ -1,18 +1,8 @@
 <h6 class="display-6 mb-4">Popular categories</h6>
 <div class="row">
-  <!-- @for (category of categories; track category.id) {
-    <a
-      href
-      [routerLink]="['/category/' + category.id]"
-      routerLinkActive="router-link-active"
-      class="col-2 text-decoration-none">
-      <div class="cat-wrapper d-flex flex-column mb-4 gap-2">
-        <img
-          [src]="category.img + '?random=' + category.id"
-          [alt]="'Category_' + category.id"
-          class="cat-img rounded-circle" />
-        <h6 class="cat-title text-center">{{ category.name }}</h6>
-      </div>
-    </a>
-  } -->
+  @for (category of categories; track category.key) {
+    <div class="category-card-wrapper col-2">
+      <rcp-category-card [category]="category" />
+    </div>
+  }
 </div>

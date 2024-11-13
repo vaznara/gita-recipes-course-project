@@ -1,24 +1,25 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { IRecipe } from '../../../../shared/interfaces/interface';
-import { RouterLink } from '@angular/router';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { IRecipeResponse } from '../../../../shared/interfaces/interface';
+import { RecipeCardComponent } from '../../../../shared/components/recipe-card/recipe-card.component';
 
 @Component({
   selector: 'rcp-featured',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RecipeCardComponent],
   templateUrl: './featured.component.html',
-  styleUrl: './featured.component.scss'
+  styleUrl: './featured.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FeaturedComponent implements OnInit {
 
   @Input() title: string = '';
-  @Input() recipes: IRecipe[] = [];
+  @Input() recipes: IRecipeResponse[] = [];
 
-  maxLengthRecipes: IRecipe[] = [];
-
-  private readonly MAX_LENGTH = 3;
+  private readonly MAX_LENGTH = 4;
 
   ngOnInit(): void {
-    this.maxLengthRecipes = this.recipes.slice(0, this.MAX_LENGTH);
+    if (this.recipes.length > this.MAX_LENGTH) {
+      this.recipes = this.recipes.slice(0, this.MAX_LENGTH);
+    }
   }
 }

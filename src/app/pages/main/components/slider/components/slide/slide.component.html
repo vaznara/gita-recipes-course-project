@@ -1,8 +1,22 @@
-<img
-  [src]="'https://picsum.photos/1500/500?random='"
-  class="d-block"
-  [alt]="slide.title" />
-<div class="carousel-caption d-none d-md-block">
-  <h5>{{ slide.title }}</h5>
-  <p>{{ slide.shortDescription }}</p>
-</div>
+<a
+  href
+  (click)="onClick(); $event.stopPropagation(); $event.preventDefault()"
+  routerLinkActive="router-link-active"
+  class="text-decoration-none position-relative">
+  <div class="slide-wrapper">
+    <div class="row">
+      <div class="slide-wrapper col-12 col-md-8">
+        <div class="slide-image-wrapper">
+          <span
+            class="slide-background d-block rounded-1"
+            [ngStyle]="{ 'background-image': 'url(' + slide.recipe.imgPath }"></span>
+        </div>
+      </div>
+      <div
+        class="p-5 slide-text col-md-4 d-none d-md-flex bg-secondary flex-column text-left justify-content-center">
+        <h5 class="display-5">{{ slide.recipe.title }}</h5>
+        <p>{{ slide.recipe.shortDescription }}</p>
+      </div>
+    </div>
+  </div>
+</a>

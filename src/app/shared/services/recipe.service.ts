@@ -52,6 +52,34 @@ export class RecipeService {
     );
   }
 
+  getFeaturedRecipes(): Observable<{ key: string, recipe: IRecipe }[]> {
+    return this.http.get<IResponseModel<IRecipe>>(
+      `${this.path + this.pathSuffix}`,
+      { params: this.createQuery('isFeatured', true) }
+    ).pipe(
+      map((data) =>
+        Object.keys(data).map(key => ({
+          key,
+          recipe: data[key]
+        }))
+      )
+    );
+  }
+
+  getMainCarouselRecipes(): Observable<{ key: string, recipe: IRecipe }[]> {
+    return this.http.get<IResponseModel<IRecipe>>(
+      `${this.path + this.pathSuffix}`,
+      { params: this.createQuery('isInMainCarousel', true) }
+    ).pipe(
+      map((data) =>
+        Object.keys(data).map(key => ({
+          key,
+          recipe: data[key]
+        }))
+      )
+    );
+  }
+
   getRecipe(key: string): Observable<IRecipe> {
     return this.http.get<IRecipe>(`${this.path}/${key}${this.pathSuffix}`);
   }
@@ -68,8 +96,8 @@ export class RecipeService {
     return this.http.patch<void>(`${this.path + this.pathSuffix}`, recipe);
   }
 
-  createQuery(field: string, value: string): HttpParams {
-    const params = { 'orderBy': `"${field}"`, 'equalTo': `"${value}"` };
+  createQuery(field: string, value: string | boolean): HttpParams {
+    const params = { 'orderBy': `"${field}"`, 'equalTo': typeof value === 'string' ? `"${value}"` : `${value}` };
     return new HttpParams({ fromObject: params });
   }
 }
