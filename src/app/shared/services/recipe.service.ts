@@ -9,10 +9,10 @@ import { environment } from '../../../environments/environment';
 })
 export class RecipeService {
 
-  recipesDummyData: IRecipe[] = []
+  recipesDummyData: IRecipe[] = [];
 
-  private readonly path = `${environment.dbPath}/recipes`
-  private readonly pathSuffix = `.json`
+  private readonly path = `${environment.dbPath}/recipes`;
+  private readonly pathSuffix = `.json`;
 
   constructor(private http: HttpClient) { }
 
@@ -27,14 +27,15 @@ export class RecipeService {
     )
   }
 
-  getRecipes(): Observable<{ key: string, recipe: IRecipe }[]> {
-    return this.http.get<IResponseModel<IRecipe>>(`${this.path + this.pathSuffix}`).pipe(
-      map((data) =>
-        Object.keys(data).map(key => ({
+  getRecipes(pageSize: number, lastItemKey?: string): Observable<{ key: string, recipe: IRecipe }[]> {
+    return this.http.get<IResponseModel<IRecipe>>(`${this.path + this.pathSuffix}`, { params: this.getPaginationParams(pageSize, lastItemKey) }).pipe(
+      map((data) => {
+        const transformedData = Object.keys(data).map(key => ({
           key,
           recipe: data[key]
         }))
-      )
+        return transformedData;
+      })
     );
   }
 
@@ -94,6 +95,17 @@ export class RecipeService {
 
   updateRecipe(recipe: IResponseModel<IRecipe>): Observable<void> {
     return this.http.patch<void>(`${this.path + this.pathSuffix}`, recipe);
+  }
+
+  getPaginationParams(pageSize: number, lastItemKey?: string): HttpParams {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let params = { 'orderBy': `"$key"`, 'limitToFirst': pageSize } as any;
+
+    if (lastItemKey) {
+      params = { ...params, 'startAfter': `"${lastItemKey}"` };
+    }
+
+    return new HttpParams({ fromObject: params });
   }
 
   createQuery(field: string, value: string | boolean): HttpParams {

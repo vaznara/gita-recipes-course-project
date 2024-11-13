@@ -1,3 +1,14 @@
 <rcp-recipes-listing
   [category]="category"
   [recipes]="recipes" />
+@if (canLoadMore) {
+  <div class="row">
+    <div class="button-wrapper col-12 text-center">
+      <button
+        (click)="loadRecipes()"
+        class="btn btn-outline-primary">
+        Load more
+      </button>
+    </div>
+  </div>
+}
