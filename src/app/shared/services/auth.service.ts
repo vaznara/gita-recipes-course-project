@@ -11,33 +11,45 @@ import {
   User,
   UserCredential,
 } from '@angular/fire/auth';
-import { ISignInUser, ISignUpUser } from '../interfaces/interface';
+import { ISignInUser, ISignUpUser, IUserProfile } from '../interfaces/interface';
 import { catchError, concatMap, from, Observable, ReplaySubject, tap, throwError } from 'rxjs';
 import { LoaderService } from './loader.service';
 import { ApiErrorHandlerService } from './api-error-handler.service';
-import { Location } from '@angular/common';
+import { HttpService } from './http.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  // private _currentUser$: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
+
+  private readonly userApiUrl = `${environment.dbPath}/users`;
+  private readonly pathSuffix = `.json`;
+
   private _currentUser$: ReplaySubject<User | null> = new ReplaySubject<User | null>(1);
+  private _newUser: User | null = null;
 
   constructor(
     private _auth: Auth,
     private apiErrorHandler: ApiErrorHandlerService,
-    private location: Location,
+    private http: HttpService,
     private loaderService: LoaderService,
-  ) {}
+  ) { }
 
   signUpUser(userData: ISignUpUser): Observable<User | null> {
     this.loaderService.isLoading$.next(true);
     return from(createUserWithEmailAndPassword(this._auth, userData.email, userData.password)).pipe(
       concatMap((userCredential) => {
-        const user = { ...userCredential.user, displayName: userData.fullName };
-        this._currentUser$.next(user);
         return from(updateProfile(userCredential.user, { displayName: userData.fullName }));
+      }),
+      concatMap(() => {
+        this._newUser = this._auth.currentUser;
+        this._currentUser$.next(this._auth.currentUser);
+        const uid = this._newUser?.uid ?? '';
+        return this.http.patch<IUserProfile>(`${this.userApiUrl}/${uid + this.pathSuffix}`, {
+          displayName: this._newUser?.displayName,
+          photoUrl: this._newUser?.photoURL
+        })
       }),
       concatMap(() => {
         window.location.reload();
@@ -87,6 +99,9 @@ export class AuthService {
       return throwError(() => 'Not Authroized');
     }
     return from(deleteUser(user)).pipe(
+      concatMap(() => {
+        return this.http.delete<void>(`${this.userApiUrl}/${this._auth.currentUser?.uid}`)
+      }),
       concatMap(() => this.signOutUser()),
       catchError((err) => {
         this.loaderService.isLoading$.next(false);
@@ -117,20 +132,21 @@ export class AuthService {
     );
   }
 
-  updateUserProfile(displayName?: string, photoURL?: string): Observable<void> {
+  updateUserProfile(displayName?: string, photoUrl?: string): Observable<void> {
     this.loaderService.isLoading$.next(true);
     return this.currentUser$.pipe(
-      catchError((err) => {
-        this.loaderService.isLoading$.next(false);
-        return throwError(() => err);
-      }),
       concatMap((user) => {
         this.loaderService.isLoading$.next(false);
         if (user) {
-          return updateProfile(user, { displayName, photoURL });
+          return from(updateProfile(user, { displayName, photoURL: photoUrl }))
+            .pipe(concatMap(() => this.http.patch<void>(`${this.userApiUrl}/${user.uid + this.pathSuffix}`, { displayName, photoUrl })));
         }
         return throwError(() => 'User not authorized');
       }),
+      catchError((err) => {
+        this.loaderService.isLoading$.next(false);
+        return throwError(() => err);
+      })
     );
   }
 

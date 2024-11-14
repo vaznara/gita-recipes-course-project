@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RecipeService } from '../../shared/services';
 import { ActivatedRoute, Router } from '@angular/router';
-import { concatMap, EMPTY, Subject, takeUntil } from 'rxjs';
-import { IRecipe, IRecipeResponse } from '../../shared/interfaces/interface';
+import { concatMap, EMPTY, Subject, take, takeUntil } from 'rxjs';
+import { IRecipe, IRecipeResponse, IUserProfile } from '../../shared/interfaces/interface';
 import { RecipeHeaderComponent } from './components/recipe-header/recipe-header.component';
 import { RecipeIngredientsComponent } from './components/recipe-ingredients/recipe-ingredients.component';
 import { RecipeStepsComponent } from './components/recipe-steps/recipe-steps.component';
@@ -26,19 +26,22 @@ export class RecipeViewComponent implements OnInit, OnDestroy {
 
   recipeKey: string | null = null;
   recipe?: IRecipe;
+  author?: IUserProfile;
 
   constructor(
     private recipeService: RecipeService,
     private router: Router,
     private title: Title,
     private route: ActivatedRoute,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const recipe = history.state.recipe as IRecipeResponse;
     if (recipe) {
       this.recipeKey = recipe.key;
       this.recipe = recipe.recipe;
+      this.recipeService.getAuthor(recipe.recipe.author).pipe(take(1))
+        .subscribe((res) => this.author = res);
       this.title.setTitle(`Recipe: ${this.recipe.title}`);
     } else {
       this.route.paramMap
@@ -52,10 +55,14 @@ export class RecipeViewComponent implements OnInit, OnDestroy {
             }
             return this.recipeService.getRecipe(this.recipeKey);
           }),
+          concatMap((res) => {
+            this.recipe = res;
+            this.title.setTitle(`Recipe: ${this.recipe.title}`);
+            return this.recipeService.getAuthor(res.author)
+          })
         )
         .subscribe((res) => {
-          this.recipe = res;
-          this.title.setTitle(`Recipe: ${this.recipe.title}`);
+          this.author = res;
         });
     }
   }

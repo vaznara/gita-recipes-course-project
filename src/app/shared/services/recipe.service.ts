@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IRecipe, IResponseModel } from '../interfaces/interface';
+import { IRecipe, IResponseModel, IUserProfile } from '../interfaces/interface';
 import { map, Observable } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
@@ -11,16 +11,17 @@ import { HttpService } from './http.service';
 export class RecipeService {
   recipesDummyData: IRecipe[] = [];
 
-  private readonly path = `${environment.dbPath}/recipes`;
+  private readonly recipesApiUrl = `${environment.dbPath}/recipes`;
+  private readonly usersApiUrl = `${environment.dbPath}/users`;
   private readonly pathSuffix = `.json`;
 
-  constructor(private http: HttpService) {}
+  constructor(private http: HttpService) { }
 
   getRecipesByCategory(categoryKey: string): Observable<{ key: string; recipe: IRecipe }[]> {
     return this.http
       .get<
         IResponseModel<IRecipe>
-      >(`${this.path + this.pathSuffix}`, this.createQuery('categoryKey', categoryKey))
+      >(`${this.recipesApiUrl + this.pathSuffix}`, this.createQuery('categoryKey', categoryKey))
       .pipe(
         map((data) =>
           Object.keys(data).map((key) => ({
@@ -38,7 +39,7 @@ export class RecipeService {
     return this.http
       .get<
         IResponseModel<IRecipe>
-      >(`${this.path + this.pathSuffix}`, this.getPaginationParams(pageSize, lastItemKey))
+      >(`${this.recipesApiUrl + this.pathSuffix}`, this.getPaginationParams(pageSize, lastItemKey))
       .pipe(
         map((data) =>
           Object.keys(data).map((key) => ({
@@ -53,7 +54,7 @@ export class RecipeService {
     return this.http
       .get<
         IResponseModel<IRecipe>
-      >(`${this.path + this.pathSuffix}`, this.createQuery('author', userId))
+      >(`${this.recipesApiUrl + this.pathSuffix}`, this.createQuery('author', userId))
       .pipe(
         map((data) =>
           Object.keys(data).map((key) => ({
@@ -68,7 +69,7 @@ export class RecipeService {
     return this.http
       .get<
         IResponseModel<IRecipe>
-      >(`${this.path + this.pathSuffix}`, this.createQuery('isFeatured', true))
+      >(`${this.recipesApiUrl + this.pathSuffix}`, this.createQuery('isFeatured', true))
       .pipe(
         map((data) =>
           Object.keys(data).map((key) => ({
@@ -83,7 +84,7 @@ export class RecipeService {
     return this.http
       .get<
         IResponseModel<IRecipe>
-      >(`${this.path + this.pathSuffix}`, this.createQuery('isInMainCarousel', true))
+      >(`${this.recipesApiUrl + this.pathSuffix}`, this.createQuery('isInMainCarousel', true))
       .pipe(
         map((data) =>
           Object.keys(data).map((key) => ({
@@ -95,19 +96,23 @@ export class RecipeService {
   }
 
   getRecipe(key: string): Observable<IRecipe> {
-    return this.http.get<IRecipe>(`${this.path}/${key}${this.pathSuffix}`);
+    return this.http.get<IRecipe>(`${this.recipesApiUrl}/${key}${this.pathSuffix}`);
   }
 
   createRecipe(recipe: IRecipe): Observable<{ name: string }> {
-    return this.http.post<{ name: string }>(`${this.path + this.pathSuffix}`, recipe);
+    return this.http.post<{ name: string }>(`${this.recipesApiUrl + this.pathSuffix}`, recipe);
   }
 
   deleteRecipe(recipeKey: string): Observable<void> {
-    return this.http.delete<void>(`${this.path}/${recipeKey}${this.pathSuffix}`);
+    return this.http.delete<void>(`${this.recipesApiUrl}/${recipeKey}${this.pathSuffix}`);
   }
 
   updateRecipe(recipe: IResponseModel<IRecipe>): Observable<void> {
-    return this.http.patch<void>(`${this.path + this.pathSuffix}`, recipe);
+    return this.http.patch<void>(`${this.recipesApiUrl + this.pathSuffix}`, recipe);
+  }
+
+  getAuthor(uid: string): Observable<IUserProfile> {
+    return this.http.get<IUserProfile>(`${this.usersApiUrl}/${uid + this.pathSuffix}`)
   }
 
   getPaginationParams(pageSize: number, lastItemKey?: string): HttpParams {

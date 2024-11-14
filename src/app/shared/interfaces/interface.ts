@@ -57,6 +57,12 @@ export interface ISignInUser {
   password: string;
 }
 
+export interface IUserProfile {
+  uid: string;
+  displayName: string;
+  photoUrl: string | null;
+}
+
 export interface IMenuItem {
   code: string;
   title: string;

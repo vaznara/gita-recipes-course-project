@@ -17,7 +17,7 @@
         <h5 class="display-5">Profile</h5>
         <div class="btn-wrapper">
           <button
-            (click)="onFullNameUpdate()"
+            (click)="onUpdate()"
             type="button"
             class="btn btn-primary text-white">
             Save
@@ -26,16 +26,34 @@
       </div>
       <hr />
       <div class="controls d-flex gap-3 align-items-center">
-        @if (user.photoURL) {
-          <img
-            [src]="user.photoURL"
-            [alt]="user.displayName"
-            class="user-photo rounded-circle" />
+        @if (imagePathControl.value) {
+          <div class="user-wrapper position-relative d-flex flex-column gap-2">
+            <div class="user-photo-wrapper">
+              <span
+                class="user-background d-block rounded-circle"
+                [ngStyle]="{ 'background-image': 'url(' + imagePathControl.value + ')' }"></span>
+            </div>
+          </div>
         } @else {
           <i class="bi bi-person-circle user-icon text-secondary"></i>
         }
+        <label
+          for="imageUpload"
+          class="form-label d-inline-block image-upload-action-uploaded position-relative mb-0">
+          <span
+            role="button"
+            class="btn btn-primary text-white">
+            Change photo
+          </span>
+        </label>
+        <input
+          hidden
+          class="form-control visibility-hidden"
+          id="imageUpload"
+          accept="image/png, image/jpeg"
+          (change)="handleImage($event)"
+          type="file" />
 
-        <button class="btn btn-primary text-white">Change photo</button>
         <button
           (click)="onDelete()"
           class="btn btn-outline-danger">

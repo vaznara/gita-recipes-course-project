@@ -10,8 +10,12 @@ export function authInterceptor(
   const authService = inject(AuthService);
 
   return authService.currentUser$.pipe(
-    concatMap((user) => (user === null ? of(null) : from(user.getIdToken()))),
+    concatMap((user) => {
+      // console.log(user)
+      return user === null ? of(null) : from(user.getIdToken())
+    }),
     concatMap((token) => {
+      // console.log(token);
       if (token === null) {
         return next(req);
       }
