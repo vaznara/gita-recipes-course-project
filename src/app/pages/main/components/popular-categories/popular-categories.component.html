@@ -1,7 +1,7 @@
 <h6 class="display-6 mb-4">Popular categories</h6>
 <div class="row">
   @for (category of categories; track category.key) {
-    <div class="category-card-wrapper col-2">
+    <div class="category-card-wrapper col-6 col-md-2">
       <rcp-category-card [category]="category" />
     </div>
   }
