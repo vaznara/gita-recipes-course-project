@@ -6,10 +6,17 @@
     <h1 class="recipe-title display-2 my-4">{{ recipe.title }}</h1>
     <div class="d-flex justify-content-start align-items-center recipe-settings gap-5">
       <div class="recipe-author d-flex gap-2 align-items-center">
-        <img
-          [src]="'author.png'"
-          alt=""
-          class="author-img rounded-circle" /><span class="author-name">Tricia Albert</span>
+        @if (author) {
+          @if (author.photoUrl) {
+            <img
+              [src]="author.photoUrl"
+              [alt]="author.displayName"
+              class="author-img rounded-circle" />
+          } @else {
+            <i class="bi bi-person-circle fs-2"></i>
+          }
+          <span class="author-name">{{ author.displayName }}</span>
+        }
       </div>
       <div class="recipe-date d-flex gap-2 align-items-center">
         <i class="bi bi-calendar-check"></i>

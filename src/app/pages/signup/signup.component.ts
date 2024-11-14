@@ -14,7 +14,7 @@ import { Subject, takeUntil } from 'rxjs';
 export class SignupComponent implements OnDestroy {
   ngUnsubscribe$: Subject<void> = new Subject();
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) { }
 
   onCreate(user: ISignUpUser): void {
     this.authService.signUpUser(user).pipe(takeUntil(this.ngUnsubscribe$)).subscribe();

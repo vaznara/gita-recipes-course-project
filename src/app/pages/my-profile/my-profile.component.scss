@@ -1,7 +1,21 @@
-.user-photo {
+.user-wrapper {
   width: 8rem;
 }
 
 .user-icon {
   font-size: 8rem;
+}
+
+.user-photo-wrapper {
+  width: 100%;
+  height: auto;
+  position: relative;
+
+  .user-background {
+    width: 100%;
+    padding-top: 100%;
+    background-position: left center;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
 }

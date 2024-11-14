@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { User } from '@angular/fire/auth';
 import { AuthService } from '../../shared/services';
 import { concatMap, Subject, takeUntil } from 'rxjs';
@@ -13,17 +13,19 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../../shared/components/dialog/dialog.component';
 import { IDialogData } from '../../shared/interfaces/interface';
 import { ApiErrorHandlerService } from '../../shared/services/api-error-handler.service';
-import { NgClass } from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 import { Title } from '@angular/platform-browser';
+import { StorageService } from '../../shared/services/storage.service';
 
 @Component({
   selector: 'rcp-my-profile',
   standalone: true,
-  imports: [ReactiveFormsModule, NgClass],
+  imports: [ReactiveFormsModule, NgClass, NgStyle],
   templateUrl: './my-profile.component.html',
   styleUrl: './my-profile.component.scss',
 })
 export class MyProfileComponent implements OnInit, OnDestroy {
+
   ngUnsubscribe$: Subject<void> = new Subject();
   user: User | null = null;
 
@@ -41,18 +43,24 @@ export class MyProfileComponent implements OnInit, OnDestroy {
 
   isUpdated: boolean = false;
 
+  imageFile?: File;
+  imagePathControl: FormControl = new FormControl('');
+
   constructor(
     private authService: AuthService,
     private dialog: MatDialog,
     private title: Title,
+    private cdr: ChangeDetectorRef,
+    private storageService: StorageService,
     private errorHandler: ApiErrorHandlerService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.authService.currentUser$.pipe(takeUntil(this.ngUnsubscribe$)).subscribe((res) => {
       this.user = res;
       if (res?.displayName) this.fullName?.setValue(res.displayName);
       if (res?.email) this.email?.setValue(res.email);
+      if (res?.photoURL) this.imagePathControl.setValue(res.photoURL);
       this.title.setTitle(`${this.user?.displayName}'s profile`);
     });
   }
@@ -65,13 +73,27 @@ export class MyProfileComponent implements OnInit, OnDestroy {
     return this.userProfileForm.get('email');
   }
 
-  onFullNameUpdate(): void {
-    if (this.fullName?.touched && this.fullName.valid) {
-      this.authService
-        .updateUserProfile(this.fullName.value)
-        .pipe(takeUntil(this.ngUnsubscribe$))
-        .subscribe(() => (this.isUpdated = true));
+  onUpdate(): void {
+    const fullName = this.fullName?.touched && this.fullName.valid ? this.fullName?.value : undefined;
+
+    if (this.imageFile) {
+      this.storageService.uploadImage(this.imageFile)
+        .pipe(
+          concatMap((imagePath) => {
+            this.imagePathControl.setValue(imagePath);
+            return this.authService
+              .updateUserProfile(fullName, imagePath)
+          }),
+          takeUntil(this.ngUnsubscribe$)
+        ).subscribe(() => this.isUpdated = true);
+      return;
     }
+
+
+    this.authService
+      .updateUserProfile(fullName)
+      .pipe(takeUntil(this.ngUnsubscribe$))
+      .subscribe(() => this.isUpdated = true);
   }
 
   onLogout(): void {
@@ -167,6 +189,20 @@ export class MyProfileComponent implements OnInit, OnDestroy {
         }),
       )
       .subscribe();
+  }
+
+  handleImage(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    if (target.files && target.files[0]) {
+      const reader = new FileReader();
+      this.imageFile = target.files[0];
+      reader.onload = (event: ProgressEvent): void => {
+        this.imagePathControl?.setValue((<FileReader>event.target).result);
+        this.cdr.detectChanges();
+      };
+
+      reader.readAsDataURL(target.files[0]);
+    }
   }
 
   ngOnDestroy(): void {
