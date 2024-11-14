@@ -8,11 +8,9 @@ import { RecipeCardComponent } from '../recipe-card/recipe-card.component';
   imports: [RecipeCardComponent],
   templateUrl: './recipes-listing.component.html',
   styleUrl: './recipes-listing.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipesListingComponent {
-
   @Input() category: ICategory | null = null;
   @Input() recipes: IRecipeResponse[] = [];
-
 }

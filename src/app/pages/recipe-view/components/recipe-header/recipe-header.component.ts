@@ -8,28 +8,28 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [MatTooltipModule],
   templateUrl: './recipe-header.component.html',
-  styleUrl: './recipe-header.component.scss'
+  styleUrl: './recipe-header.component.scss',
 })
 export class RecipeHeaderComponent implements OnInit {
-
   @Input() recipeKey: string | null = null;
 
   recipeLink: string = '';
 
   constructor(
     private clipboard: Clipboard,
-    private router: Router
-  ) { }
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
-    this.recipeLink = this.router.url === '/recipe/view'
-      ? `${window.location.href}/${this.recipeKey}`
-      : this.router.url;
+    this.recipeLink =
+      this.router.url === '/recipe/view'
+        ? `${window.location.href}/${this.recipeKey}`
+        : this.router.url;
   }
 
   onShare(tooltip: MatTooltip): void {
     this.clipboard.copy(this.recipeLink);
     tooltip.show();
-    setTimeout(() => tooltip.hide(), 2000)
+    setTimeout(() => tooltip.hide(), 2000);
   }
 }

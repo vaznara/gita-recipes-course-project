@@ -9,10 +9,9 @@ import { User } from '@angular/fire/auth';
   imports: [RouterLink, RouterLinkActive],
   templateUrl: './main-menu.component.html',
   styleUrl: './main-menu.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainMenuComponent {
-
   @Input() user: User | null = null;
   @Input() userMenu?: IMenuItem[];
 

@@ -18,35 +18,36 @@ import { IMenuItem } from '../../../shared/interfaces/interface';
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-
   ngUnsubscribe$: Subject<void> = new Subject();
   user: User | null = null;
   userMenu: IMenuItem[] = [
-    { code: 'profile', path: 'user/profile', title: 'My Profile' },
-    { code: 'recipes', path: 'user/recipes', title: 'My Recipes' },
-    { code: 'createRecipe', path: 'user/recipe/new', title: 'Create recipe' },
+    { code: 'profile', path: 'my-profile', title: 'My Profile' },
+    { code: 'recipes', path: 'my-recipes', title: 'My Recipes' },
+    { code: 'createRecipe', path: 'recipe/new', title: 'Create recipe' },
   ];
 
   private dialogRef?: MatDialogRef<LoginModalComponent>;
 
-  constructor(private authService: AuthService, private router: Router, private dialog: MatDialog) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private dialog: MatDialog,
+  ) {}
 
   ngOnInit(): void {
-    this.authService.currentUser$.pipe(
-      takeUntil(this.ngUnsubscribe$)
-    )
-      .subscribe((user) => {
-        this.user = user;
-      })
+    this.authService.currentUser$.pipe(takeUntil(this.ngUnsubscribe$)).subscribe((user) => {
+      this.user = user;
+    });
 
-    this.router.events.pipe(
-      filter((event: Event | RouterEvent) => event instanceof NavigationStart),
-      filter(() => !!this.dialogRef),
-      takeUntil(this.ngUnsubscribe$)
-    )
+    this.router.events
+      .pipe(
+        filter((event: Event | RouterEvent) => event instanceof NavigationStart),
+        filter(() => !!this.dialogRef),
+        takeUntil(this.ngUnsubscribe$),
+      )
       .subscribe(() => {
         this.dialogRef?.close();
-      })
+      });
   }
 
   onLogin(): void {
@@ -56,8 +57,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   onLogout(): void {
-    this.authService.signOutUser().pipe(takeUntil(this.ngUnsubscribe$))
-      .subscribe()
+    this.authService.signOutUser().pipe(takeUntil(this.ngUnsubscribe$)).subscribe();
   }
 
   ngOnDestroy(): void {

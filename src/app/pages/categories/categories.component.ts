@@ -10,18 +10,19 @@ import { NgStyle } from '@angular/common';
   standalone: true,
   imports: [RouterLink, NgStyle],
   templateUrl: './categories.component.html',
-  styleUrl: './categories.component.scss'
+  styleUrl: './categories.component.scss',
 })
 export class CategoriesComponent implements OnInit, OnDestroy {
-
   ngUnsubscribe$: Subject<void> = new Subject();
   categories: ICategoryResponse[] = [];
 
-  constructor(private categoryService: CategoryService) { }
+  constructor(private categoryService: CategoryService) {}
 
   ngOnInit(): void {
-    this.categoryService.getCategories().pipe(takeUntil(this.ngUnsubscribe$))
-      .subscribe(res => this.categories = res)
+    this.categoryService
+      .getCategories()
+      .pipe(takeUntil(this.ngUnsubscribe$))
+      .subscribe((res) => (this.categories = res));
   }
 
   ngOnDestroy(): void {

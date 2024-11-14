@@ -14,18 +14,16 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrl: './layout.component.scss',
 })
 export class LayoutComponent implements OnInit, OnDestroy {
-
   private readonly ngUnsubscribe$: Subject<void> = new Subject();
 
   shouldShowBreadcrumb: boolean = true;
 
-  constructor(private breadcrumbService: BreadcrumbService) { }
+  constructor(private breadcrumbService: BreadcrumbService) {}
 
   ngOnInit(): void {
-    this.breadcrumbService.breadcrumbs$.pipe(takeUntil(this.ngUnsubscribe$))
-      .subscribe(res => {
-        this.shouldShowBreadcrumb = res.size !== 1;
-      })
+    this.breadcrumbService.breadcrumbs$.pipe(takeUntil(this.ngUnsubscribe$)).subscribe((res) => {
+      this.shouldShowBreadcrumb = res.size !== 1;
+    });
   }
 
   ngOnDestroy(): void {

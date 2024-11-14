@@ -7,11 +7,11 @@ import { RcpError } from '../../services/api-error-handler.service';
   standalone: true,
   imports: [],
   templateUrl: './error-dialog.component.html',
-  styleUrl: './error-dialog.component.scss'
+  styleUrl: './error-dialog.component.scss',
 })
 export class ErrorDialogComponent {
-
-  constructor(public dialogRef: MatDialogRef<ErrorDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public error: RcpError
-  ) { }
+  constructor(
+    public dialogRef: MatDialogRef<ErrorDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public error: RcpError,
+  ) {}
 }

@@ -10,16 +10,15 @@ import { UserAccessDirective } from '../../directives/user-access.directive';
   imports: [NgStyle, UserAccessDirective],
   templateUrl: './recipe-card.component.html',
   styleUrl: './recipe-card.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeCardComponent {
-
   @Input() recipe?: IRecipeResponse;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
   onEdit(): void {
-    this.router.navigate([`/user/recipe/edit`], { state: { recipe: this.recipe } });
+    this.router.navigate([`/recipe/edit`], { state: { recipe: this.recipe } });
   }
 
   onView(): void {

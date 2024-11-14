@@ -8,10 +8,9 @@ import { NgClass } from '@angular/common';
   standalone: true,
   imports: [SlideComponent, NgClass],
   templateUrl: './slider.component.html',
-  styleUrl: './slider.component.scss'
+  styleUrl: './slider.component.scss',
 })
 export class SliderComponent {
-
   @Input() recipes?: IRecipeResponse[];
 
   @Output() viewRecipe: EventEmitter<IRecipeResponse> = new EventEmitter();

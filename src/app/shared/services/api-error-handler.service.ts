@@ -8,26 +8,25 @@ export class RcpError {
   title?: string;
   message!: string;
 
-  constructor(error: HttpErrorResponse | { name: string, message: string }) {
+  constructor(error: HttpErrorResponse | { name: string; message: string }) {
     this.title = error.name;
     this.message = error.message;
   }
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ApiErrorHandlerService {
+  constructor(private dialog: MatDialog) {}
 
-  constructor(private dialog: MatDialog) { }
-
-  handleError(error: HttpErrorResponse | { name: string, message: string }): Observable<never> {
+  handleError(error: HttpErrorResponse | { name: string; message: string }): Observable<never> {
     this.dialog.closeAll();
     const rcpError = new RcpError(error);
     this.dialog.open(ErrorDialogComponent, {
-      data: rcpError
-    })
+      data: rcpError,
+    });
 
-    return throwError(() => rcpError)
+    return throwError(() => rcpError);
   }
 }

@@ -1,5 +1,18 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import {
+  AbstractControl,
+  FormArray,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { AuthService, CategoryService, RecipeService } from '../../shared/services';
 import { combineLatestWith, concatMap, Subject, take, takeUntil } from 'rxjs';
 import { StorageService } from '../../shared/services/storage.service';
@@ -17,10 +30,9 @@ import { Title } from '@angular/platform-browser';
   imports: [ReactiveFormsModule, NgClass],
   templateUrl: './recipe-edit.component.html',
   styleUrl: './recipe-edit.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeEditComponent implements OnInit, OnDestroy {
-
   ngUnsubscribe$: Subject<void> = new Subject();
 
   recipeForm: FormGroup = new FormGroup({
@@ -31,9 +43,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     servingCount: new FormControl(1, [Validators.required, Validators.min(1)]),
     categoryKey: new FormControl('', [Validators.required]),
     ingredientsBlock: new FormArray([]),
-    steps: new FormArray([
-      new FormControl('', [Validators.required, Validators.minLength(11)])
-    ])
+    steps: new FormArray([new FormControl('', [Validators.required, Validators.minLength(11)])]),
   });
 
   recipeKey?: string;
@@ -48,20 +58,22 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private dialog: MatDialog,
     private titleService: Title,
-    private router: Router
-  ) { }
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
-    this.categoryService.getCategories().pipe(take(1))
-      .subscribe(res => {
+    this.categoryService
+      .getCategories()
+      .pipe(take(1))
+      .subscribe((res) => {
         this.categories = res;
         this.cdr.markForCheck();
-      })
+      });
 
     const recipe = history.state.recipe;
 
     if (recipe) {
-      this.titleService.setTitle(`Edit recipe: ${recipe.recipe.title}`)
+      this.titleService.setTitle(`Edit recipe: ${recipe.recipe.title}`);
       this.patchValue(recipe);
     } else {
       this.ingredientBlocks.push(this.ingredientsBlockFormGroup);
@@ -72,18 +84,21 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   patchValue(recipe: IRecipeResponse): void {
     recipe.recipe.ingredientsBlock.forEach((block, idx) => {
       this.ingredientBlocks.push(this.ingredientsBlockFormGroup);
-      this.ingredientBlocks.at(idx).get('ingredientsBlockTitle')?.patchValue(block.ingredientsBlockTitle)
+      this.ingredientBlocks
+        .at(idx)
+        .get('ingredientsBlockTitle')
+        ?.patchValue(block.ingredientsBlockTitle);
       while (this.getBlockIngredients(idx).length < block.ingredients.length) {
-        this.getBlockIngredients(idx).push(this.getIngredientFormGroup())
+        this.getBlockIngredients(idx).push(this.getIngredientFormGroup());
       }
-    })
+    });
 
     this.recipeKey = recipe.key;
     this.recipeForm.patchValue(recipe.recipe);
   }
 
   getIsRequired(controlName: string): boolean {
-    return !!this.recipeForm.get(controlName)?.hasValidator(Validators.required)
+    return !!this.recipeForm.get(controlName)?.hasValidator(Validators.required);
   }
 
   get ingredientBlocks(): FormArray {
@@ -129,8 +144,8 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   get ingredientsBlockFormGroup(): FormGroup {
     return new FormGroup({
       ingredientsBlockTitle: new FormControl('', [Validators.required]),
-      ingredients: new FormArray([])
-    })
+      ingredients: new FormArray([]),
+    });
   }
 
   addIngredient(idx: number): void {
@@ -141,8 +156,11 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     return new FormGroup({
       name: new FormControl(ingredient?.name ?? '', [Validators.required, Validators.minLength(4)]),
       unit: new FormControl(ingredient?.unit ?? '', [Validators.required]),
-      quantity: new FormControl(ingredient?.quantity ?? 0.1, [Validators.required, Validators.min(0.1)])
-    })
+      quantity: new FormControl(ingredient?.quantity ?? 0.1, [
+        Validators.required,
+        Validators.min(0.1),
+      ]),
+    });
   }
 
   removeIngredient(idx: number, ingIdx: number): void {
@@ -158,14 +176,14 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   }
 
   handleImage(event: Event): void {
-    const target = (event.target as HTMLInputElement);
+    const target = event.target as HTMLInputElement;
     if (target.files && target.files[0]) {
       const reader = new FileReader();
       this.imageFile = target.files[0];
       reader.onload = (event: ProgressEvent): void => {
         this.imagePath?.setValue((<FileReader>event.target).result);
         this.cdr.detectChanges();
-      }
+      };
 
       reader.readAsDataURL(target.files[0]);
     }
@@ -175,7 +193,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     const files = (event.target as HTMLInputElement).files;
     if (!files) {
       this.dialog.open(ErrorDialogComponent, {
-        data: new RcpError({ name: 'Error!', message: 'Please choose file.' })
+        data: new RcpError({ name: 'Error!', message: 'Please choose file.' }),
       });
       return;
     }
@@ -187,37 +205,45 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
       this.deleteImage(imagePathControl?.value);
     }
 
-    this.storageService.uploadImage(files[0]).pipe(take(1))
-      .subscribe(res => {
+    this.storageService
+      .uploadImage(files[0])
+      .pipe(take(1))
+      .subscribe((res) => {
         this.recipeForm.get('imgPath')?.setValue(res);
         this.cdr.detectChanges();
-      })
+      });
   }
 
   deleteImage(imagePath: string): void {
-    this.storageService.deletImage(imagePath).pipe(take(1))
-      .subscribe()
+    this.storageService.deletImage(imagePath).pipe(take(1)).subscribe();
   }
 
   onSubmit(): void {
     if (this.imageFile) {
-      this.authService.currentUser$.pipe(
-        takeUntil(this.ngUnsubscribe$),
-        combineLatestWith(this.storageService.uploadImage(this.imageFile)),
-        concatMap(([user, imagePath]) => {
-          this.imagePath?.setValue(imagePath, { emitValue: false });
-          const recipe = { ...this.recipeForm.value, author: user?.uid, isFeatured: false, isInMainCarousel: false };
-          return this.recipeKey
-            ? this.recipeService.updateRecipe({ [this.recipeKey]: recipe })
-            : this.recipeService.createRecipe(recipe)
-        })
-      ).subscribe(res => {
-        this.router.navigate([`/recipe/view`], {
-          state: {
-            recipe: { key: this.recipeKey ?? res?.name, recipe: this.recipeForm.value }
-          }
-        })
-      })
+      this.authService.currentUser$
+        .pipe(
+          takeUntil(this.ngUnsubscribe$),
+          combineLatestWith(this.storageService.uploadImage(this.imageFile)),
+          concatMap(([user, imagePath]) => {
+            this.imagePath?.setValue(imagePath, { emitValue: false });
+            const recipe = {
+              ...this.recipeForm.value,
+              author: user?.uid,
+              isFeatured: false,
+              isInMainCarousel: false,
+            };
+            return this.recipeKey
+              ? this.recipeService.updateRecipe({ [this.recipeKey]: recipe })
+              : this.recipeService.createRecipe(recipe);
+          }),
+        )
+        .subscribe((res) => {
+          this.router.navigate([`/recipe/view`], {
+            state: {
+              recipe: { key: this.recipeKey ?? res?.name, recipe: this.recipeForm.value },
+            },
+          });
+        });
     }
   }
 

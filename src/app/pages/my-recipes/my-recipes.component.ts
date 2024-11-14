@@ -1,18 +1,18 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { takeUntil, concatMap, Subject, EMPTY } from 'rxjs';
-import { AuthService, RecipeService } from '../../../../shared/services';
-import { IRecipeResponse } from '../../../../shared/interfaces/interface';
-import { RecipesListingComponent } from '../../../../shared/components/recipes-listing/recipes-listing.component';
+import { AuthService, RecipeService } from '../../shared/services';
+import { IRecipeResponse } from '../../shared/interfaces/interface';
+import { RecipesListingComponent } from '../../shared/components/recipes-listing/recipes-listing.component';
 
 @Component({
-  selector: 'rcp-recipes',
+  selector: 'rcp-my-recipes',
   standalone: true,
   imports: [RecipesListingComponent],
-  templateUrl: './recipes.component.html',
-  styleUrl: './recipes.component.scss'
+  templateUrl: './my-recipes.component.html',
+  styleUrl: './my-recipes.component.scss',
 })
-export class RecipesComponent implements OnInit, OnDestroy {
+export class MyRecipesComponent implements OnInit, OnDestroy {
   private readonly ngUnsubscribe$: Subject<void> = new Subject();
 
   recipes: IRecipeResponse[] = [];
@@ -21,7 +21,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private recipeService: RecipeService,
     private router: Router,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.authService.currentUser$

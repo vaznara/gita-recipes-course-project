@@ -1,7 +1,7 @@
-import { TemplateRef } from "@angular/core";
+import { TemplateRef } from '@angular/core';
 
 export interface IResponseModel<T> {
-  [key: string]: T
+  [key: string]: T;
 }
 
 export interface ICategory {
@@ -26,8 +26,8 @@ export interface IRecipe {
 }
 
 export interface IRecipeResponse {
-  key: string,
-  recipe: IRecipe
+  key: string;
+  recipe: IRecipe;
 }
 
 export interface ICategoryResponse {
@@ -54,7 +54,7 @@ export interface ISignUpUser {
 
 export interface ISignInUser {
   email: string;
-  password: string
+  password: string;
 }
 
 export interface IMenuItem {
@@ -85,5 +85,5 @@ export interface IDialogDataButton {
 
 export interface IBreadcrumb {
   label: string;
-  url: string
+  url: string;
 }

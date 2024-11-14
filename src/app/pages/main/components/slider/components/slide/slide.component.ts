@@ -7,10 +7,9 @@ import { NgStyle } from '@angular/common';
   standalone: true,
   imports: [NgStyle],
   templateUrl: './slide.component.html',
-  styleUrl: './slide.component.scss'
+  styleUrl: './slide.component.scss',
 })
 export class SlideComponent {
-
   @Input() slide!: IRecipeResponse;
   @Output() viewRecipe: EventEmitter<void> = new EventEmitter();
 

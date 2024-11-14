@@ -8,10 +8,9 @@ import { RecipeCardComponent } from '../../../../shared/components/recipe-card/r
   imports: [RecipeCardComponent],
   templateUrl: './featured.component.html',
   styleUrl: './featured.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FeaturedComponent implements OnInit {
-
   @Input() title: string = '';
   @Input() recipes: IRecipeResponse[] = [];
 

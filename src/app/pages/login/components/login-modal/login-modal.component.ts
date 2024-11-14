@@ -10,20 +10,21 @@ import { Subject, takeUntil } from 'rxjs';
   standalone: true,
   imports: [LoginFormComponent, MatDialogClose],
   templateUrl: './login-modal.component.html',
-  styleUrl: './login-modal.component.scss'
+  styleUrl: './login-modal.component.scss',
 })
 export class LoginModalComponent implements OnDestroy {
-
   ngUnsubscribe$: Subject<void> = new Subject();
 
   constructor(
     public dialogRef: MatDialogRef<LoginModalComponent>,
-    private authService: AuthService
-  ) { }
+    private authService: AuthService,
+  ) {}
 
   onLogin(userData: ISignInUser): void {
-    this.authService.signInUser(userData).pipe(takeUntil(this.ngUnsubscribe$))
-      .subscribe(() => this.dialogRef.close())
+    this.authService
+      .signInUser(userData)
+      .pipe(takeUntil(this.ngUnsubscribe$))
+      .subscribe(() => this.dialogRef.close());
   }
 
   ngOnDestroy(): void {
