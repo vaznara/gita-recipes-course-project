@@ -11,10 +11,9 @@ import { Title } from '@angular/platform-browser';
   standalone: true,
   imports: [RecipesListingComponent],
   templateUrl: './recipes.component.html',
-  styleUrl: './recipes.component.scss'
+  styleUrl: './recipes.component.scss',
 })
 export class RecipesComponent implements OnInit, OnDestroy {
-
   ngUnsubscribe$: Subject<void> = new Subject();
 
   private readonly pageSize: number = 20;
@@ -25,49 +24,52 @@ export class RecipesComponent implements OnInit, OnDestroy {
 
   canLoadMore = true;
 
-  constructor(private route: ActivatedRoute,
+  constructor(
+    private route: ActivatedRoute,
     private recipeService: RecipeService,
     private title: Title,
-    private categoryService: CategoryService) {
-
-  }
+    private categoryService: CategoryService,
+  ) {}
 
   ngOnInit(): void {
-    this.route.queryParamMap.pipe(
-      takeUntil(this.ngUnsubscribe$),
-      concatMap(res => {
-        this.categoryKey = res.get('key');
-        if (!this.categoryKey) return of(null);
-        return this.categoryService.getCategory(this.categoryKey);
-      }),
-      concatMap((category) => {
-        this.category = category;
-        this.title.setTitle(`Recipes from ${this.category?.name} category`);
-        return this.categoryKey ? this.recipeService.getRecipesByCategory(this.categoryKey) : this.recipeService.getRecipes(this.pageSize);
-      })
-    )
-      .subscribe(res => {
+    this.route.queryParamMap
+      .pipe(
+        takeUntil(this.ngUnsubscribe$),
+        concatMap((res) => {
+          this.categoryKey = res.get('key');
+          if (!this.categoryKey) return of(null);
+          return this.categoryService.getCategory(this.categoryKey);
+        }),
+        concatMap((category) => {
+          this.category = category;
+          this.title.setTitle(`Recipes from ${this.category?.name} category`);
+          return this.categoryKey
+            ? this.recipeService.getRecipesByCategory(this.categoryKey)
+            : this.recipeService.getRecipes(this.pageSize);
+        }),
+      )
+      .subscribe((res) => {
         if (res.length !== this.pageSize) {
           this.canLoadMore = false;
         }
         this.recipes = res;
-      })
+      });
   }
 
   loadRecipes(): void {
-    this.recipeService.getRecipes(this.pageSize, this.recipes[this.recipes.length - 1].key)
+    this.recipeService
+      .getRecipes(this.pageSize, this.recipes[this.recipes.length - 1].key)
       .pipe(take(1))
       .subscribe((res) => {
         if (res.length !== this.pageSize) {
           this.canLoadMore = false;
         }
         this.recipes = [...this.recipes, ...res];
-      })
+      });
   }
 
   ngOnDestroy(): void {
     this.ngUnsubscribe$.next();
     this.ngUnsubscribe$.complete();
   }
-
 }

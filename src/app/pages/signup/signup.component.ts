@@ -9,22 +9,19 @@ import { Subject, takeUntil } from 'rxjs';
   standalone: true,
   imports: [SignupFormComponent],
   templateUrl: './signup.component.html',
-  styleUrl: './signup.component.scss'
+  styleUrl: './signup.component.scss',
 })
 export class SignupComponent implements OnDestroy {
-
   ngUnsubscribe$: Subject<void> = new Subject();
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService) {}
 
   onCreate(user: ISignUpUser): void {
-    this.authService.signUpUser(user).pipe(takeUntil(this.ngUnsubscribe$))
-      .subscribe()
+    this.authService.signUpUser(user).pipe(takeUntil(this.ngUnsubscribe$)).subscribe();
   }
 
   ngOnDestroy(): void {
     this.ngUnsubscribe$.next();
     this.ngUnsubscribe$.complete();
   }
-
 }

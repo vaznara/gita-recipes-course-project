@@ -9,19 +9,17 @@ import { User } from '@angular/fire/auth';
   imports: [RouterLink],
   templateUrl: './user-control.component.html',
   styleUrl: './user-control.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserControlComponent {
-
   @Input() user: User | null = null;
   @Input() userMenu?: IMenuItem[];
 
   @Output() logout: EventEmitter<void> = new EventEmitter();
 
-  constructor() { }
+  constructor() {}
 
   onLogout(): void {
     this.logout.emit();
   }
-
 }

@@ -13,8 +13,7 @@ export const loginGuard: CanActivateFn = () => {
         return of(true);
       }
 
-      return router.navigate(['/'])
-
-    })
-  )
+      return router.navigate(['/']);
+    }),
+  );
 };

@@ -6,9 +6,8 @@ import { IIngredient } from '../../../../shared/interfaces/interface';
   standalone: true,
   imports: [],
   templateUrl: './recipe-ingredients.component.html',
-  styleUrl: './recipe-ingredients.component.scss'
+  styleUrl: './recipe-ingredients.component.scss',
 })
 export class RecipeIngredientsComponent {
-
   @Input() ingredients: IIngredient[] = [];
 }

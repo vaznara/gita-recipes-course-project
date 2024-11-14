@@ -8,9 +8,8 @@ import { NgStyle } from '@angular/common';
   standalone: true,
   imports: [RouterLink, NgStyle],
   templateUrl: './category-card.component.html',
-  styleUrl: './category-card.component.scss'
+  styleUrl: './category-card.component.scss',
 })
 export class CategoryCardComponent {
-
   @Input() category?: ICategoryResponse;
 }

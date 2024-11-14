@@ -5,9 +5,8 @@ import { Component, Input } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './recipe-steps.component.html',
-  styleUrl: './recipe-steps.component.scss'
+  styleUrl: './recipe-steps.component.scss',
 })
 export class RecipeStepsComponent {
-
   @Input() steps: string[] = [];
 }

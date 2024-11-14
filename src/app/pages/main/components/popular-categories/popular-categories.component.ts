@@ -8,10 +8,9 @@ import { CategoryCardComponent } from '../../../../shared/components/category-ca
   imports: [CategoryCardComponent],
   templateUrl: './popular-categories.component.html',
   styleUrl: './popular-categories.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PopularCategoriesComponent implements OnInit {
-
   private readonly MAX_LENGTH = 6;
 
   @Input() categories: ICategoryResponse[] = [];

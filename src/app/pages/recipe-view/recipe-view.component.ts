@@ -12,12 +12,16 @@ import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'rcp-recipe-view',
   standalone: true,
-  imports: [RecipeHeaderComponent, RecipeIngredientsComponent, RecipeStepsComponent, UserAccessDirective],
+  imports: [
+    RecipeHeaderComponent,
+    RecipeIngredientsComponent,
+    RecipeStepsComponent,
+    UserAccessDirective,
+  ],
   templateUrl: './recipe-view.component.html',
-  styleUrl: './recipe-view.component.scss'
+  styleUrl: './recipe-view.component.scss',
 })
 export class RecipeViewComponent implements OnInit, OnDestroy {
-
   private readonly ngUnsubscribe$: Subject<void> = new Subject();
 
   recipeKey: string | null = null;
@@ -27,8 +31,8 @@ export class RecipeViewComponent implements OnInit, OnDestroy {
     private recipeService: RecipeService,
     private router: Router,
     private title: Title,
-    private route: ActivatedRoute
-  ) { }
+    private route: ActivatedRoute,
+  ) {}
 
   ngOnInit(): void {
     const recipe = history.state.recipe as IRecipeResponse;
@@ -37,20 +41,22 @@ export class RecipeViewComponent implements OnInit, OnDestroy {
       this.recipe = recipe.recipe;
       this.title.setTitle(`Recipe: ${this.recipe.title}`);
     } else {
-      this.route.paramMap.pipe(
-        takeUntil(this.ngUnsubscribe$),
-        concatMap((params) => {
-          this.recipeKey = params.get('key');
-          if (!this.recipeKey) {
-            this.router.navigate(['/recipes']);
-            return EMPTY;
-          }
-          return this.recipeService.getRecipe(this.recipeKey);
-        })
-      ).subscribe(res => {
-        this.recipe = res;
-        this.title.setTitle(`Recipe: ${this.recipe.title}`);
-      })
+      this.route.paramMap
+        .pipe(
+          takeUntil(this.ngUnsubscribe$),
+          concatMap((params) => {
+            this.recipeKey = params.get('key');
+            if (!this.recipeKey) {
+              this.router.navigate(['/recipes']);
+              return EMPTY;
+            }
+            return this.recipeService.getRecipe(this.recipeKey);
+          }),
+        )
+        .subscribe((res) => {
+          this.recipe = res;
+          this.title.setTitle(`Recipe: ${this.recipe.title}`);
+        });
     }
   }
 
@@ -59,12 +65,13 @@ export class RecipeViewComponent implements OnInit, OnDestroy {
   }
 
   onEdit(): void {
-    this.router.navigate([`/user/recipe/edit`], { state: { recipe: { key: this.recipeKey, recipe: this.recipe } } });
+    this.router.navigate([`/user/recipe/edit`], {
+      state: { recipe: { key: this.recipeKey, recipe: this.recipe } },
+    });
   }
 
   ngOnDestroy(): void {
     this.ngUnsubscribe$.next();
     this.ngUnsubscribe$.complete();
   }
-
 }

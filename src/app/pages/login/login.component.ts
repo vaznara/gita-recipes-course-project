@@ -10,18 +10,17 @@ import { ActivatedRoute, Router } from '@angular/router';
   standalone: true,
   imports: [LoginFormComponent],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrl: './login.component.scss',
 })
 export class LoginComponent implements OnInit, OnDestroy {
-
   ngUnsubscribe$: Subject<void> = new Subject();
   sourcePath: string | null = null;
 
   constructor(
     private authService: AuthService,
     private route: ActivatedRoute,
-    private router: Router
-  ) { }
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     const sourceParam = this.route.snapshot.queryParamMap.get('source');
@@ -32,10 +31,12 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   onLogin(userData: ISignInUser): void {
-    this.authService.signInUser(userData).pipe(takeUntil(this.ngUnsubscribe$))
+    this.authService
+      .signInUser(userData)
+      .pipe(takeUntil(this.ngUnsubscribe$))
       .subscribe(() => {
-        this.router.navigate([this.sourcePath])
-      })
+        this.router.navigate([this.sourcePath]);
+      });
   }
 
   ngOnDestroy(): void {

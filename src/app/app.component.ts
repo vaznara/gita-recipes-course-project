@@ -13,7 +13,6 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit, OnDestroy {
-
   ngUnsubscribe$: Subject<void> = new Subject();
 
   isLoading: boolean = false;
@@ -22,22 +21,19 @@ export class AppComponent implements OnInit, OnDestroy {
     @Inject(DOCUMENT) private document: Document,
     private authService: AuthService,
     private renderer: Renderer2,
-    public loaderService: LoaderService
-  ) { }
+    public loaderService: LoaderService,
+  ) {}
 
   ngOnInit(): void {
-
     this.authService.checkAuthState();
 
-    this.loaderService.isLoading$.pipe(takeUntil(this.ngUnsubscribe$))
-      .subscribe(state => {
-        state
-          ? this.renderer.addClass(this.document.body, 'noscroll')
-          : this.renderer.removeClass(this.document.body, 'noscroll');
+    this.loaderService.isLoading$.pipe(takeUntil(this.ngUnsubscribe$)).subscribe((state) => {
+      state
+        ? this.renderer.addClass(this.document.body, 'noscroll')
+        : this.renderer.removeClass(this.document.body, 'noscroll');
 
-        this.isLoading = state;
-      })
-
+      this.isLoading = state;
+    });
   }
 
   ngOnDestroy(): void {
