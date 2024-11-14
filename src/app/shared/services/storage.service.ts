@@ -10,7 +10,10 @@ import { environment } from '../../../environments/environment';
 })
 export class StorageService {
 
-  constructor(private errorHandler: ApiErrorHandlerService, private loaderService: LoaderService) { }
+  constructor(
+    private errorHandler: ApiErrorHandlerService,
+    private loaderService: LoaderService
+  ) { }
 
   uploadImage(file: File): Observable<string> {
 
