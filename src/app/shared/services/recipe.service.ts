@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { IRecipe, IResponseModel } from '../interfaces/interface';
 import { map, Observable } from 'rxjs';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { HttpService } from './http.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +15,10 @@ export class RecipeService {
   private readonly path = `${environment.dbPath}/recipes`;
   private readonly pathSuffix = `.json`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpService) { }
 
   getRecipesByCategory(categoryKey: string): Observable<{ key: string, recipe: IRecipe }[]> {
-    return this.http.get<IResponseModel<IRecipe>>(`${this.path + this.pathSuffix}`, { params: this.createQuery('categoryKey', categoryKey) }).pipe(
+    return this.http.get<IResponseModel<IRecipe>>(`${this.path + this.pathSuffix}`, this.createQuery('categoryKey', categoryKey)).pipe(
       map((data) =>
         Object.keys(data).map(key => ({
           key,
@@ -28,21 +29,20 @@ export class RecipeService {
   }
 
   getRecipes(pageSize: number, lastItemKey?: string): Observable<{ key: string, recipe: IRecipe }[]> {
-    return this.http.get<IResponseModel<IRecipe>>(`${this.path + this.pathSuffix}`, { params: this.getPaginationParams(pageSize, lastItemKey) }).pipe(
-      map((data) => {
-        const transformedData = Object.keys(data).map(key => ({
+    return this.http.get<IResponseModel<IRecipe>>(`${this.path + this.pathSuffix}`, this.getPaginationParams(pageSize, lastItemKey)).pipe(
+      map((data) =>
+        Object.keys(data).map(key => ({
           key,
           recipe: data[key]
         }))
-        return transformedData;
-      })
+      )
     );
   }
 
   getUserRecipes(userId: string): Observable<{ key: string, recipe: IRecipe }[]> {
     return this.http.get<IResponseModel<IRecipe>>(
       `${this.path + this.pathSuffix}`,
-      { params: this.createQuery('author', userId) }
+      this.createQuery('author', userId)
     ).pipe(
       map((data) =>
         Object.keys(data).map(key => ({
@@ -56,7 +56,7 @@ export class RecipeService {
   getFeaturedRecipes(): Observable<{ key: string, recipe: IRecipe }[]> {
     return this.http.get<IResponseModel<IRecipe>>(
       `${this.path + this.pathSuffix}`,
-      { params: this.createQuery('isFeatured', true) }
+      this.createQuery('isFeatured', true)
     ).pipe(
       map((data) =>
         Object.keys(data).map(key => ({
@@ -70,7 +70,7 @@ export class RecipeService {
   getMainCarouselRecipes(): Observable<{ key: string, recipe: IRecipe }[]> {
     return this.http.get<IResponseModel<IRecipe>>(
       `${this.path + this.pathSuffix}`,
-      { params: this.createQuery('isInMainCarousel', true) }
+      this.createQuery('isInMainCarousel', true)
     ).pipe(
       map((data) =>
         Object.keys(data).map(key => ({

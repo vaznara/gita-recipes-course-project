@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ICategory, ICategoryResponse, IResponseModel } from '../interfaces/interface';
 import { map, Observable } from 'rxjs';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { HttpService } from './http.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class CategoryService {
   private readonly path = `${environment.dbPath}/categories`;
   private readonly pathSuffix = '.json'
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpService) { }
 
   getCategories(): Observable<ICategoryResponse[]> {
     return this.http.get<IResponseModel<ICategory>>(`${this.path}${this.pathSuffix}`).pipe(
@@ -27,7 +28,7 @@ export class CategoryService {
 
   getPopularCategories(): Observable<ICategoryResponse[]> {
     return this.http.get<IResponseModel<ICategory>>(`${this.path}${this.pathSuffix}`,
-      { params: this.createQuery('isPopular', true) }
+      this.createQuery('isPopular', true)
     ).pipe(
       map((data) =>
         Object.keys(data).map(key => ({
