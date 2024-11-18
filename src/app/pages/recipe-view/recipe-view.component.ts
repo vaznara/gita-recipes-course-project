@@ -33,15 +33,17 @@ export class RecipeViewComponent implements OnInit, OnDestroy {
     private router: Router,
     private title: Title,
     private route: ActivatedRoute,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     const recipe = history.state.recipe as IRecipeResponse;
     if (recipe) {
       this.recipeKey = recipe.key;
       this.recipe = recipe.recipe;
-      this.recipeService.getAuthor(recipe.recipe.author).pipe(take(1))
-        .subscribe((res) => this.author = res);
+      this.recipeService
+        .getAuthor(recipe.recipe.author)
+        .pipe(take(1))
+        .subscribe((res) => (this.author = res));
       this.title.setTitle(`Recipe: ${this.recipe.title}`);
     } else {
       this.route.paramMap
@@ -58,8 +60,8 @@ export class RecipeViewComponent implements OnInit, OnDestroy {
           concatMap((res) => {
             this.recipe = res;
             this.title.setTitle(`Recipe: ${this.recipe.title}`);
-            return this.recipeService.getAuthor(res.author)
-          })
+            return this.recipeService.getAuthor(res.author);
+          }),
         )
         .subscribe((res) => {
           this.author = res;

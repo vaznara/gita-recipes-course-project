@@ -22,7 +22,6 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root',
 })
 export class AuthService {
-
   private readonly userApiUrl = `${environment.dbPath}/users`;
   private readonly pathSuffix = `.json`;
 
@@ -34,7 +33,7 @@ export class AuthService {
     private apiErrorHandler: ApiErrorHandlerService,
     private http: HttpService,
     private loaderService: LoaderService,
-  ) { }
+  ) {}
 
   signUpUser(userData: ISignUpUser): Observable<User | null> {
     this.loaderService.isLoading$.next(true);
@@ -48,8 +47,8 @@ export class AuthService {
         const uid = this._newUser?.uid ?? '';
         return this.http.patch<IUserProfile>(`${this.userApiUrl}/${uid + this.pathSuffix}`, {
           displayName: this._newUser?.displayName,
-          photoUrl: this._newUser?.photoURL
-        })
+          photoUrl: this._newUser?.photoURL,
+        });
       }),
       concatMap(() => {
         window.location.reload();
@@ -100,7 +99,7 @@ export class AuthService {
     }
     return from(deleteUser(user)).pipe(
       concatMap(() => {
-        return this.http.delete<void>(`${this.userApiUrl}/${this._auth.currentUser?.uid}`)
+        return this.http.delete<void>(`${this.userApiUrl}/${this._auth.currentUser?.uid}`);
       }),
       concatMap(() => this.signOutUser()),
       catchError((err) => {
@@ -138,15 +137,21 @@ export class AuthService {
       concatMap((user) => {
         this.loaderService.isLoading$.next(false);
         if (user) {
-          return from(updateProfile(user, { displayName, photoURL: photoUrl }))
-            .pipe(concatMap(() => this.http.patch<void>(`${this.userApiUrl}/${user.uid + this.pathSuffix}`, { displayName, photoUrl })));
+          return from(updateProfile(user, { displayName, photoURL: photoUrl })).pipe(
+            concatMap(() =>
+              this.http.patch<void>(`${this.userApiUrl}/${user.uid + this.pathSuffix}`, {
+                displayName,
+                photoUrl,
+              }),
+            ),
+          );
         }
         return throwError(() => 'User not authorized');
       }),
       catchError((err) => {
         this.loaderService.isLoading$.next(false);
         return throwError(() => err);
-      })
+      }),
     );
   }
 

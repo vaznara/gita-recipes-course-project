@@ -32,7 +32,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private router: Router,
     private dialog: MatDialog,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.authService.currentUser$.pipe(takeUntil(this.ngUnsubscribe$)).subscribe((user) => {

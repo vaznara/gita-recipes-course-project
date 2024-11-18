@@ -16,7 +16,7 @@ export class RecipeCardComponent {
   @Input() recipe?: IRecipeResponse;
   @Input() isPriorityImage: boolean = false;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
   onEdit(): void {
     this.router.navigate([`/recipe/edit`], { state: { recipe: this.recipe } });

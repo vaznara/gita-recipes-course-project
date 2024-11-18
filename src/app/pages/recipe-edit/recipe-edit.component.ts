@@ -50,6 +50,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   recipeKey?: string;
   categories: ICategoryResponse[] = [];
   imageFile: File | null = null;
+  isEditMode: boolean = false;
 
   constructor(
     private recipeService: RecipeService,
@@ -60,7 +61,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private titleService: Title,
     private router: Router,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.categoryService
@@ -74,6 +75,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     const recipe = history.state.recipe;
 
     if (recipe) {
+      this.isEditMode = true;
       this.titleService.setTitle(`Edit recipe: ${recipe.recipe.title}`);
       this.patchValue(recipe);
     } else {

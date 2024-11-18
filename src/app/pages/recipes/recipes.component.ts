@@ -29,7 +29,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
     private recipeService: RecipeService,
     private title: Title,
     private categoryService: CategoryService,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.route.queryParamMap

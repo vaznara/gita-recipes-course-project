@@ -11,7 +11,7 @@ export function authInterceptor(
 
   return authService.currentUser$.pipe(
     concatMap((user) => {
-      return user === null ? of(null) : from(user.getIdToken())
+      return user === null ? of(null) : from(user.getIdToken());
     }),
     concatMap((token) => {
       if (token === null) {

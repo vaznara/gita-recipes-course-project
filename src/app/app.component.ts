@@ -13,7 +13,6 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit, OnDestroy {
-
   ngUnsubscribe$: Subject<void> = new Subject();
 
   isLoading: boolean = false;
@@ -23,7 +22,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private renderer: Renderer2,
     public loaderService: LoaderService,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.authService.checkAuthState();

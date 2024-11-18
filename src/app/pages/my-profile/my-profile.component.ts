@@ -1,4 +1,11 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { User } from '@angular/fire/auth';
 import { AuthService } from '../../shared/services';
 import { concatMap, Subject, takeUntil } from 'rxjs';
@@ -25,7 +32,6 @@ import { StorageService } from '../../shared/services/storage.service';
   styleUrl: './my-profile.component.scss',
 })
 export class MyProfileComponent implements OnInit, OnDestroy {
-
   ngUnsubscribe$: Subject<void> = new Subject();
   user: User | null = null;
 
@@ -53,7 +59,7 @@ export class MyProfileComponent implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private storageService: StorageService,
     private errorHandler: ApiErrorHandlerService,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.authService.currentUser$.pipe(takeUntil(this.ngUnsubscribe$)).subscribe((res) => {
@@ -74,26 +80,27 @@ export class MyProfileComponent implements OnInit, OnDestroy {
   }
 
   onUpdate(): void {
-    const fullName = this.fullName?.touched && this.fullName.valid ? this.fullName?.value : undefined;
+    const fullName =
+      this.fullName?.touched && this.fullName.valid ? this.fullName?.value : undefined;
 
     if (this.imageFile) {
-      this.storageService.uploadImage(this.imageFile)
+      this.storageService
+        .uploadImage(this.imageFile)
         .pipe(
           concatMap((imagePath) => {
             this.imagePathControl.setValue(imagePath);
-            return this.authService
-              .updateUserProfile(fullName, imagePath)
+            return this.authService.updateUserProfile(fullName, imagePath);
           }),
-          takeUntil(this.ngUnsubscribe$)
-        ).subscribe(() => this.isUpdated = true);
+          takeUntil(this.ngUnsubscribe$),
+        )
+        .subscribe(() => (this.isUpdated = true));
       return;
     }
-
 
     this.authService
       .updateUserProfile(fullName)
       .pipe(takeUntil(this.ngUnsubscribe$))
-      .subscribe(() => this.isUpdated = true);
+      .subscribe(() => (this.isUpdated = true));
   }
 
   onLogout(): void {

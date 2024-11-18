@@ -4,7 +4,8 @@
       <rcp-recipe-header [recipeKey]="recipeKey" />
     </div>
     <h1 class="recipe-title display-2 my-4">{{ recipe.title }}</h1>
-    <div class="d-flex flex-wrap justify-content-start align-items-center recipe-settings gap-4 gap-sm-5">
+    <div
+      class="d-flex flex-wrap justify-content-start align-items-center recipe-settings gap-4 gap-sm-5">
       <div class="recipe-author d-flex gap-2 align-items-center">
         @if (author) {
           @if (author.photoUrl) {
