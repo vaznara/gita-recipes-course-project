@@ -43,6 +43,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     servingCount: new FormControl(1, [Validators.required, Validators.min(1)]),
     categoryKey: new FormControl('', [Validators.required]),
     ingredientsBlock: new FormArray([]),
+    author: new FormControl(''),
     steps: new FormArray([new FormControl('', [Validators.required, Validators.minLength(11)])]),
   });
 
@@ -59,7 +60,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private titleService: Title,
     private router: Router,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.categoryService
@@ -226,9 +227,9 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
           combineLatestWith(this.storageService.uploadImage(this.imageFile)),
           concatMap(([user, imagePath]) => {
             this.imagePath?.setValue(imagePath, { emitValue: false });
+            this.recipeForm.controls['author'].setValue(user?.uid, { emitEvent: false });
             const recipe = {
               ...this.recipeForm.value,
-              author: user?.uid,
               isFeatured: false,
               isInMainCarousel: false,
             };
