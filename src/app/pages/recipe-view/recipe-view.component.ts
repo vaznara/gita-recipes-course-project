@@ -33,7 +33,7 @@ export class RecipeViewComponent implements OnInit, OnDestroy {
     private router: Router,
     private title: Title,
     private route: ActivatedRoute,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const recipe = history.state.recipe as IRecipeResponse;
@@ -74,7 +74,7 @@ export class RecipeViewComponent implements OnInit, OnDestroy {
   }
 
   onEdit(): void {
-    this.router.navigate([`/user/recipe/edit`], {
+    this.router.navigate([`/recipe/edit`], {
       state: { recipe: { key: this.recipeKey, recipe: this.recipe } },
     });
   }
