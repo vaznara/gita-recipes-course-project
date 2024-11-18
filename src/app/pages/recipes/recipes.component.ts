@@ -29,7 +29,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
     private recipeService: RecipeService,
     private title: Title,
     private categoryService: CategoryService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.route.queryParamMap
@@ -42,7 +42,9 @@ export class RecipesComponent implements OnInit, OnDestroy {
         }),
         concatMap((category) => {
           this.category = category;
-          this.title.setTitle(`Recipes from ${this.category?.name} category`);
+          if (this.category) {
+            this.title.setTitle(`Recipes from ${this.category?.name} category`);
+          }
           return this.categoryKey
             ? this.recipeService.getRecipesByCategory(this.categoryKey)
             : this.recipeService.getRecipes(this.pageSize);
