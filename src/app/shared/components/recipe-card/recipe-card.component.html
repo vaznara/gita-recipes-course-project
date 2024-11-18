@@ -6,9 +6,14 @@
     class="text-decoration-none position-relative">
     <div class="recipe-wrapper position-relative d-flex flex-column mb-4 gap-2">
       <div class="recipe-image-wrapper">
-        <span
-          class="recipe-background d-block rounded-1"
-          [ngStyle]="{ 'background-image': 'url(' + recipe.recipe.imgPath }"></span>
+        <span class="recipe-background d-block position-relative">
+          <img
+            fill
+            [priority]="isPriorityImage"
+            class="rounded-1 object-fit-cover"
+            [ngSrc]="recipe.recipe.imgPath"
+            [alt]="recipe.recipe.title"
+        /></span>
       </div>
       <div class="recipe-ratings d-flex gap-1">
         @for (i of [].constructor(4); track $index) {

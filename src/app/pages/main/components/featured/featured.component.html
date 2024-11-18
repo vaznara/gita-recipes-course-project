@@ -3,7 +3,9 @@
   <div class="row">
     @for (recipe of recipes; track $index) {
       <div class="col-6 col-md-3">
-        <rcp-recipe-card [recipe]="recipe" />
+        <rcp-recipe-card
+          [isPriorityImage]="true"
+          [recipe]="recipe" />
       </div>
     }
   </div>

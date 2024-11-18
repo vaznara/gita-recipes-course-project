@@ -7,9 +7,14 @@
     <div class="row">
       <div class="slide-wrapper col-12 col-lg-8">
         <div class="slide-image-wrapper">
-          <span
-            class="slide-background d-block rounded-1"
-            [ngStyle]="{ 'background-image': 'url(' + slide.recipe.imgPath }"></span>
+          <span class="slide-background d-block position-relative">
+            <img
+              class="object-fit-cover rounded-1"
+              fill
+              [priority]="isPriorityImage"
+              [ngSrc]="slide.recipe.imgPath"
+              [alt]="slide.recipe.title"
+          /></span>
         </div>
       </div>
       <div
