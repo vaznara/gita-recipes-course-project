@@ -15,7 +15,7 @@ export class RecipeService {
   private readonly usersApiUrl = `${environment.dbPath}/users`;
   private readonly pathSuffix = `.json`;
 
-  constructor(private http: HttpService) { }
+  constructor(private http: HttpService) {}
 
   getRecipesByCategory(categoryKey: string): Observable<{ key: string; recipe: IRecipe }[]> {
     return this.http
@@ -112,7 +112,7 @@ export class RecipeService {
   }
 
   getAuthor(uid: string): Observable<IUserProfile> {
-    return this.http.get<IUserProfile>(`${this.usersApiUrl}/${uid + this.pathSuffix}`)
+    return this.http.get<IUserProfile>(`${this.usersApiUrl}/${uid + this.pathSuffix}`);
   }
 
   getPaginationParams(pageSize: number, lastItemKey?: string): HttpParams {

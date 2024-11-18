@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationStart, Router, RouterEvent, RouterLink, Event } from '@angular/router';
 import { MainMenuComponent } from './components/main-menu/main-menu.component';
-import { SearchComponent } from './components/search/search.component';
 import { UserControlComponent } from './components/user-control/user-control.component';
 import { AuthService } from '../../../shared/services';
 import { filter, Subject, takeUntil } from 'rxjs';
@@ -9,11 +8,12 @@ import { User } from '@angular/fire/auth';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { LoginModalComponent } from '../../../pages/login/components/login-modal/login-modal.component';
 import { IMenuItem } from '../../../shared/interfaces/interface';
+import { NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'rcp-header',
   standalone: true,
-  imports: [RouterLink, MainMenuComponent, SearchComponent, UserControlComponent],
+  imports: [RouterLink, MainMenuComponent, UserControlComponent, NgOptimizedImage],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })

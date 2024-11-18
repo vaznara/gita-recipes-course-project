@@ -9,9 +9,13 @@
       class="col-6 col-sm-3 text-decoration-none position-relative">
       <div class="category-wrapper position-relative d-flex flex-column mb-4 gap-2">
         <div class="category-image-wrapper">
-          <span
-            class="category-background d-block rounded-circle"
-            [ngStyle]="{ 'background-image': 'url(' + item.category.imgPath + ')' }"></span>
+          <span class="category-background d-block position-relative">
+            <img
+              fill
+              class="object-fit-cover rounded-circle"
+              [ngSrc]="item.category.imgPath"
+              alt="" />
+          </span>
         </div>
         <h6 class="cat-title text-center">{{ item.category.name }}</h6>
       </div>

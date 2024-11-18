@@ -19,6 +19,7 @@
         [ngClass]="{ active: $index === 0 }">
         <rcp-slide
           (viewRecipe)="onView(item)"
+          [isPriorityImage]="$index === 0"
           [slide]="item" />
       </div>
     }

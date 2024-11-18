@@ -3,12 +3,12 @@ import { RouterLink } from '@angular/router';
 import { ICategoryResponse } from '../../shared/interfaces/interface';
 import { Subject, takeUntil } from 'rxjs';
 import { CategoryService } from '../../shared/services';
-import { NgStyle } from '@angular/common';
+import { NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'rcp-categories',
   standalone: true,
-  imports: [RouterLink, NgStyle],
+  imports: [RouterLink, NgOptimizedImage],
   templateUrl: './categories.component.html',
   styleUrl: './categories.component.scss',
 })

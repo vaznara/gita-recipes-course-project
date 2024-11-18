@@ -1,19 +1,20 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { IRecipeResponse } from '../../interfaces/interface';
 import { Router } from '@angular/router';
-import { NgStyle } from '@angular/common';
+import { NgOptimizedImage } from '@angular/common';
 import { UserAccessDirective } from '../../directives/user-access.directive';
 
 @Component({
   selector: 'rcp-recipe-card',
   standalone: true,
-  imports: [NgStyle, UserAccessDirective],
+  imports: [UserAccessDirective, NgOptimizedImage],
   templateUrl: './recipe-card.component.html',
   styleUrl: './recipe-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeCardComponent {
   @Input() recipe?: IRecipeResponse;
+  @Input() isPriorityImage: boolean = false;
 
   constructor(private router: Router) {}
 

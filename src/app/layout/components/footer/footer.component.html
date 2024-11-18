@@ -9,8 +9,9 @@
               [routerLink]="['/']"
               href
               ><img
-                src="logo.svg"
+                ngSrc="logo.svg"
                 width="100"
+                height="80"
                 alt="Recipes"
                 class="logo"
             /></a>
@@ -282,10 +283,26 @@
           <p>&copy; 2024 Gita course project - All rights reserved</p>
         </div>
         <div class="footer-social d-flex gap-1">
-          <button class="btn"><i class="bi bi-facebook"></i></button>
-          <button class="btn"><i class="bi bi-twitter-x"></i></button>
-          <button class="btn"><i class="bi bi-instagram"></i></button>
-          <button class="btn"><i class="bi bi-youtube"></i></button>
+          <button
+            class="btn"
+            aria-label="Facebook page">
+            <i class="bi bi-facebook"></i>
+          </button>
+          <button
+            class="btn"
+            aria-label="Social X page">
+            <i class="bi bi-twitter-x"></i>
+          </button>
+          <button
+            class="btn"
+            aria-label="Instagram page">
+            <i class="bi bi-instagram"></i>
+          </button>
+          <button
+            class="btn"
+            aria-label="Youtube channel">
+            <i class="bi bi-youtube"></i>
+          </button>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-12">
-    <h1 class="display-2">Create new recipe</h1>
+    <h1 class="display-2">{{ isEditMode ? 'Edit recipe' : 'Create new recipe' }}</h1>
     <hr class="my-3" />
     <form
       (ngSubmit)="onSubmit()"
@@ -12,13 +12,14 @@
             for="imageUpload"
             class="form-label d-block image-upload-action">
             <div
-              class="image-placeholder py-5 w-100 d-flex justify-content-center align-items-center">
+              class="image-placeholder py-5 w-100 d-flex flex-column justify-content-center align-items-center">
               <i
                 class="bi bi-cloud-arrow-up-fill image-icon"
                 [ngClass]="{
                   'text-primary': imagePath?.pristine,
-                  'text-danger': imagePath?.touched && imagePath?.invalid,
+                  'text-danger': recipeForm.touched && imagePath?.invalid,
                 }"></i>
+              <h3 class="text-center">Click here to upload recipe image</h3>
             </div>
           </label>
         }
@@ -44,8 +45,16 @@
           class="form-control visibility-hidden"
           id="imageUpload"
           accept="image/png, image/jpeg"
+          [ngClass]="{
+            'is-invalid': recipeForm.touched && imagePath?.invalid,
+          }"
           (change)="handleImage($event)"
           type="file" />
+        <div class="invalid-feedback">
+          @if (imagePath?.hasError('required')) {
+            Image is required
+          }
+        </div>
       </div>
       <div class="mb-3">
         <label
@@ -216,6 +225,7 @@
                   >Ingredients for:
                 </span>
                 <input
+                  [id]="'ingredients-block_' + blockIdx"
                   type="text"
                   class="form-control"
                   formControlName="ingredientsBlockTitle"
