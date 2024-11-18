@@ -1,20 +1,29 @@
 <div class="navbar bg-body-tertiary">
   <div class="container-fluid">
     <div class="container pt-5 pb-3">
-      <div class="footer-content d-flex flex-column flex-md-row justify-content-between pb-5">
-        <div class="brand-left flex-grow-0 flex-shrink-1">
-          <a
-            class="navbar-brand fw-bold fs-2 d-block mb-2"
-            href="#"
-            >Recipes</a
-          >
-          <p>
-            "On the other hand, we denounce with righteous indignation and <br />dislike men who are
-            so beguiled and demoralized by the charms <br />of pleasure of the moment."
-          </p>
+      <div class="footer-content row flex-column flex-lg-row justify-content-between pb-5">
+        <div class="brand-left align-items-center col-12 col-lg-6 mb-5 mb-lg-0">
+          <div class="brand-wrapper d-flex flex-nowrap align-items-center gap-1 pe-3">
+            <a
+              class="navbar-brand fw-bold fs-2 d-block"
+              [routerLink]="['/']"
+              href
+              ><img
+                src="logo.svg"
+                width="100"
+                alt="Recipes"
+                class="logo"
+            /></a>
+            <div class="quote-wrapper">
+              <p class="m-0">
+                "Cooking is an art, a passion, and a journey. <br class="d-none d-md-block" />Every
+                recipe tells a story, and every dish brings people together."
+              </p>
+            </div>
+          </div>
         </div>
-        <div class="nav-right">
-          <nav class="footer-nav d-none d-md-flex d-flex gap-5">
+        <div class="nav-right col-12 col-lg-6">
+          <nav class="footer-nav d-none d-lg-flex gap-1 gap-lg-5 justify-content-end">
             <ul class="nav flex-column">
               <li class="nav-link fw-bold text-decoration-underline fs-6">Tastebite</li>
               <li class="nav-item">
@@ -109,7 +118,7 @@
               </li>
             </ul>
           </nav>
-          <nav class="footer-nav d-flex flex-column d-md-none">
+          <nav class="footer-nav d-flex flex-column d-lg-none">
             <div
               class="accordion accordion-flush"
               id="accordionFlushExample">
@@ -268,7 +277,7 @@
         </div>
       </div>
       <hr class="divider" />
-      <div class="footer-end d-flex justify-content-between">
+      <div class="footer-end d-flex flex-column flex-md-row justify-content-between">
         <div class="footer-copyright">
           <p>&copy; 2024 Gita course project - All rights reserved</p>
         </div>
