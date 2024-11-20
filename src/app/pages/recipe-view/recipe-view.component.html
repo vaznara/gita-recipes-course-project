@@ -19,10 +19,12 @@
           <span class="author-name">{{ author.displayName }}</span>
         }
       </div>
-      <div class="recipe-date d-flex gap-2 align-items-center">
-        <i class="bi bi-calendar-check"></i>
-        <span>Yesterday</span>
-      </div>
+      @if (recipe.createdAt) {
+        <div class="recipe-date d-flex gap-2 align-items-center">
+          <i class="bi bi-calendar-check"></i>
+          <span>{{ recipe.createdAt | date: 'MMM dd, yyyy HH:mm' }}</span>
+        </div>
+      }
       <div class="recipe-comments d-flex gap-2 align-items-center">
         <i class="bi bi-chat"></i>
         <span>25</span>

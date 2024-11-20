@@ -8,6 +8,7 @@ import { RecipeIngredientsComponent } from './components/recipe-ingredients/reci
 import { RecipeStepsComponent } from './components/recipe-steps/recipe-steps.component';
 import { UserAccessDirective } from '../../shared/directives/user-access.directive';
 import { Title } from '@angular/platform-browser';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'rcp-recipe-view',
@@ -17,6 +18,7 @@ import { Title } from '@angular/platform-browser';
     RecipeIngredientsComponent,
     RecipeStepsComponent,
     UserAccessDirective,
+    DatePipe
   ],
   templateUrl: './recipe-view.component.html',
   styleUrl: './recipe-view.component.scss',
