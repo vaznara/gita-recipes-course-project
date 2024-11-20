@@ -16,11 +16,11 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   ngUnsubscribe$: Subject<void> = new Subject();
   categories: ICategoryResponse[] = [];
 
-  constructor(private categoryService: CategoryService) {}
+  constructor(private categoryService: CategoryService) { }
 
   ngOnInit(): void {
     this.categoryService
-      .getCategories()
+      .categories$
       .pipe(takeUntil(this.ngUnsubscribe$))
       .subscribe((res) => (this.categories = res));
   }

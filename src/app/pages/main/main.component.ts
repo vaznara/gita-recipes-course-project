@@ -25,7 +25,7 @@ export class MainComponent implements OnInit, OnDestroy {
     private recipeService: RecipeService,
     private categoryService: CategoryService,
     private router: Router,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.recipeService
@@ -39,7 +39,7 @@ export class MainComponent implements OnInit, OnDestroy {
       .subscribe((res) => (this.carouselRecipes = res));
 
     this.categoryService
-      .getPopularCategories()
+      .popularCategories$
       .pipe(takeUntil(this.ngUnsubscribe$))
       .subscribe((res) => (this.popularCategories = res));
   }
