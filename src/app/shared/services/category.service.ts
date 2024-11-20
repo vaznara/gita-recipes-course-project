@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ICategory, ICategoryResponse, IResponseModel } from '../interfaces/interface';
-import { map, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable, switchMap, tap } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { HttpService } from './http.service';
@@ -9,12 +9,23 @@ import { HttpService } from './http.service';
   providedIn: 'root',
 })
 export class CategoryService {
+
   private readonly path = `${environment.dbPath}/categories`;
   private readonly pathSuffix = '.json';
+  private readonly _popularCategories$: BehaviorSubject<ICategoryResponse[]> = new BehaviorSubject([] as ICategoryResponse[]);
+  private readonly _categories$: BehaviorSubject<ICategoryResponse[]> = new BehaviorSubject([] as ICategoryResponse[]);
 
-  constructor(private http: HttpService) {}
+  constructor(private http: HttpService) { }
 
-  getCategories(): Observable<ICategoryResponse[]> {
+  get categories$(): Observable<ICategoryResponse[]> {
+    return this._categories$.pipe(
+      switchMap(data => {
+        return !data.length ? this.getCategoriesFromApi() : this._categories$.asObservable();
+      })
+    )
+  }
+
+  private getCategoriesFromApi(): Observable<ICategoryResponse[]> {
     return this.http.get<IResponseModel<ICategory>>(`${this.path}${this.pathSuffix}`).pipe(
       map((data) =>
         Object.keys(data).map((key) => ({
@@ -22,10 +33,21 @@ export class CategoryService {
           category: data[key],
         })),
       ),
+      tap((data) => {
+        this._categories$.next(data);
+      })
     );
   }
 
-  getPopularCategories(): Observable<ICategoryResponse[]> {
+  get popularCategories$(): Observable<ICategoryResponse[]> {
+    return this._popularCategories$.pipe(
+      switchMap((res) => {
+        return !res.length ? this.getPopularCategoriesFromApi() : this._popularCategories$.asObservable();
+      })
+    )
+  }
+
+  private getPopularCategoriesFromApi(): Observable<ICategoryResponse[]> {
     return this.http
       .get<
         IResponseModel<ICategory>
@@ -37,6 +59,9 @@ export class CategoryService {
             category: data[key],
           })),
         ),
+        tap((data) => {
+          this._popularCategories$.next(data);
+        }),
       );
   }
 

@@ -61,11 +61,11 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private titleService: Title,
     private router: Router,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.categoryService
-      .getCategories()
+      .categories$
       .pipe(take(1))
       .subscribe((res) => {
         this.categories = res;
