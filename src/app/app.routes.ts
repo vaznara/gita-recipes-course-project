@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './shared/guards/auth-guard.guard';
 import { loginGuard } from './shared/guards/login.guard';
+import { formGuard } from './shared/guards/form.guard';
 
 export const routes: Routes = [
   {
@@ -29,7 +30,7 @@ export const routes: Routes = [
       },
       {
         path: 'edit',
-        canActivateChild: [authGuard],
+        canDeactivate: [formGuard],
         runGuardsAndResolvers: 'always',
         loadComponent: () =>
           import('./pages/recipe-edit/recipe-edit.component').then((c) => c.RecipeEditComponent),
@@ -38,7 +39,7 @@ export const routes: Routes = [
       },
       {
         path: 'new',
-        canActivateChild: [authGuard],
+        canDeactivate: [formGuard],
         runGuardsAndResolvers: 'always',
         loadComponent: () =>
           import('./pages/recipe-edit/recipe-edit.component').then((c) => c.RecipeEditComponent),
