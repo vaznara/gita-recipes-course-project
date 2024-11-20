@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  HostListener,
   OnDestroy,
   OnInit,
 } from '@angular/core';
@@ -241,12 +242,20 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
           }),
         )
         .subscribe((res) => {
+          this.recipeForm.markAsUntouched();
           this.router.navigate([`/recipe/view`], {
             state: {
               recipe: { key: this.recipeKey ?? res?.name, recipe: this.recipeForm.value },
             },
           });
         });
+    }
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  beforeLeave($event: Event): void {
+    if (this.recipeForm.touched) {
+      ($event as BeforeUnloadEvent).preventDefault();
     }
   }
 
