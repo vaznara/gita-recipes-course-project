@@ -13,6 +13,7 @@
     >
     <rcp-main-menu
       [userMenu]="userMenu"
+      (logout)="onLogout()"
       [user]="user" />
     <div class="user d-flex gap-2 align-items-center">
       <!-- TODO implement search -->
