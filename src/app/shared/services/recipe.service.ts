@@ -15,7 +15,7 @@ export class RecipeService {
   private readonly usersApiUrl = `${environment.dbPath}/users`;
   private readonly pathSuffix = `.json`;
 
-  constructor(private http: HttpService) {}
+  constructor(private http: HttpService) { }
 
   getRecipesByCategory(categoryKey: string): Observable<{ key: string; recipe: IRecipe }[]> {
     return this.http
@@ -100,7 +100,7 @@ export class RecipeService {
   }
 
   createRecipe(recipe: IRecipe): Observable<{ name: string }> {
-    return this.http.post<{ name: string }>(`${this.recipesApiUrl + this.pathSuffix}`, recipe);
+    return this.http.post<{ name: string }>(`${this.recipesApiUrl + this.pathSuffix}`, { ...recipe, createdAt: { ".sv": "timestamp" } });
   }
 
   deleteRecipe(recipeKey: string): Observable<void> {
